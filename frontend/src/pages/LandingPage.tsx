@@ -22,7 +22,7 @@ export default function LandingPage() {
               </Button>
             ) : (
               <Button asChild>
-                <Link to="/strides">Add strides</Link>
+                <Link to="/strides/add">Add strides</Link>
               </Button>
             )}
             <Button variant="outline" asChild>

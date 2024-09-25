@@ -18,6 +18,7 @@ const sidebarItems = [
 
 export default function ProfilePage() {
   const { user } = useUser();
+
   const [activeTab, setActiveTab] = useState("Profile");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -146,7 +147,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-[auto_1fr] grid-rows-2 mt-8 mb-9 gap-x-4 gap-y-0">
             <UserAvatar className="row-span-2" />
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-medium">{user.username}</h2>
+              <h2 className="text-xl font-medium">{user?.username}</h2>
               {user.role === "admin" && (
                 <BadgeCheck size={24} strokeWidth={0.8} />
               )}
