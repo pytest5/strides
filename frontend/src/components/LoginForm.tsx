@@ -76,7 +76,7 @@ export default function LoginForm() {
     // ✅ This will be type-safe and validated.
     try {
       const jwt = await authService.login(values);
-      localStorage.setItem("jwt", JSON.stringify(jwt));
+      localStorage.setItem("jwt", jwt);
       const user = JSON.parse(atob(jwt.split(".")[1]));
       setUser(user);
       setIsLoggedIn(true);
