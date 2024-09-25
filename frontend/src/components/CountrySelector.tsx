@@ -48,7 +48,7 @@ export const CountrySelector = ({ field, form }) => {
     ({ id, name }: { id: number; name: string }) => ({
       id: id,
       label: name,
-      value: name,
+      value: id,
     })
   );
 
