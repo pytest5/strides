@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
-import AdminPage from "./pages/AdminPage.tsx";
+import { AdminPage } from "./pages/AdminPage.tsx";
 import protectedLoader from "./loaders/protectedLoader.ts";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
@@ -67,6 +67,15 @@ const router = createBrowserRouter([
             loader: protectedLoader,
             children: [{ path: "strides/add", element: <AddStridesPage /> }],
           },
+          {
+            loader: protectedLoader, // TODO: CHANGE TO PROTECTED ADMIN LOADER
+            children: [
+              // { path: "admin", element: <AdminPage /> },
+              { path: "admin", element: <AdminPage /> },
+
+              { path: "admin/profile", element: <ProfilePage /> },
+            ],
+          },
         ],
       },
       {
@@ -75,14 +84,6 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfilePage />,
-          },
-
-          {
-            loader: protectedAdminLoader,
-            children: [
-              { path: "admin", element: <AdminPage /> },
-              { path: "admin/profile", element: <ProfilePage /> },
-            ],
           },
         ],
       },
