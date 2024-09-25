@@ -9,7 +9,7 @@ export default async function protectedLoader() {
   }
 
   if (jwt !== null) {
-    const token = JSON.parse(jwt);
+    const token = jwt;
     if (!token) {
       console.log("not authenticated");
       return redirect("/");
