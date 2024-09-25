@@ -57,8 +57,94 @@ async function getCurrTotalStridesStats(req, res, next) {
     console.log("getting current total strides stats");
     const text = "SELECT * FROM total_strides_stats";
     const data = await db.query(text);
-    console.log("hey", data);
     res.status(200).json(data.rows);
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ error: e.message });
+  }
+}
+
+async function addStride(req, res, next) {
+  const { data, location } = req.body;
+  const { id, country_id, username, role, email } = req.me;
+  try {
+    // Insert the stride and get the stride_id
+    const insertStrideText = ` 
+      INSERT INTO strides (country_id, user_id, location, address, distance, time_in_minutes, team_id)
+      VALUES ($1, $2, ST_POINT($3, $4), $5, $6, $7, $8)
+      RETURNING id
+    `;
+    const strideValues = [
+      country_id,
+      id,
+      location.longitude, // st point
+      location.latitude, // st point
+      null, // address
+      10, // distance
+      3, // time in minutes
+      data.team ? Number(data.team) : null, // team_id
+    ];
+
+    console.log("yo", strideValues);
+
+    const result = await db.query(insertStrideText, strideValues);
+    const strideId = result.rows[0].id;
+
+    // Loop through items in req.body.data
+    for (const [itemName, quantity] of Object.entries(data)) {
+      if (quantity === 0) continue;
+      else {
+        console.log("inserting ", itemName, quantity);
+        const insertItemText = `
+          INSERT INTO strides_items (item_id, stride_id, quantity, created_at)
+          VALUES (
+            (SELECT id FROM items WHERE name = $1), 
+            $2, 
+            $3, 
+            NOW()
+          )
+        `;
+        const itemValues = [itemName, strideId, quantity];
+        await db.query(insertItemText, itemValues);
+      }
+    }
+    res.status(200).json({ message: "success" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ error: e.message });
+  }
+}
+
+async function deleteStride(req, res, next) {
+  const { strideId } = req.body;
+  try {
+    const text = `
+    DELETE FROM strides
+    WHERE id =  $1;
+    `;
+    const values = [strideId];
+    const data = await db.query(text, values);
+    console.log(data);
+    res.status(200).json(data.rows);
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ error: e.message });
+  }
+}
+
+async function updateStride(req, res, next) {
+  const { strideData } = req.body;
+  console.log("yo", strideData);
+  try {
+    const text = `
+    DELETE FROM strides
+    WHERE id =  $1;
+    `;
+    // const values = [strideId];
+    // const data = await db.query(text, values);
+    // console.log(data);
+    res.status(200).json({ message: "lol" });
+    // res.status(200).json(data.rows);
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ error: e.message });
@@ -71,4 +157,7 @@ module.exports = {
   getCurrAllStridesLocation,
   getTotalStridesStats,
   getCurrTotalStridesStats,
+  addStride,
+  deleteStride,
+  updateStride,
 };
