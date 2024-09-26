@@ -44,6 +44,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { TeamComboBox } from "@/components/TeamComboBox";
+import { useTriggerToast } from "@/hooks/use-trigger-toast";
 
 interface Stride {
   strides_id: number;
@@ -85,6 +86,7 @@ function EditStrideDialog({
   const [open, setOpen] = React.useState(false);
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
+  const triggerToast = useTriggerToast();
 
   const form = useForm<EditStrideFormType>({
     resolver: zodResolver(formSchema),
@@ -106,6 +108,7 @@ function EditStrideDialog({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fetchAdminData"] });
       onSave();
+      triggerToast("submit");
       setOpen(false);
     },
   });
@@ -137,8 +140,11 @@ function EditStrideDialog({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 md:space-y-8"
+          >
+            {/* <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
@@ -158,8 +164,8 @@ function EditStrideDialog({
               <div className="text-destructive">
                 {form.formState.errors?.username?.message}
               </div>
-            )}
-            <FormField
+            )} */}
+            {/* <FormField
               control={form.control}
               name="country"
               render={({ field }) => (
@@ -176,7 +182,7 @@ function EditStrideDialog({
               <div className="text-destructive">
                 {form.formState.errors?.country?.message}
               </div>
-            )}
+            )} */}
             <FormField
               control={form.control}
               name="distance"
@@ -227,14 +233,19 @@ function EditStrideDialog({
                 {form.formState.errors?.duration?.message}
               </div>
             )}
-            <TeamComboBox
-              value={watchTeam}
-              setValue={(value) => {
-                console.log("setting value", value);
-                form.setValue("team", value);
-              }}
-              variant="label"
-            />
+            <div className="space-y-2">
+              <h2 className="text-sm pb-0 font-semibold text-gray-900 md:pb-4 md:text-xl md:font-bold md:mb-0">
+                Team
+              </h2>
+              <TeamComboBox
+                value={watchTeam}
+                setValue={(value) => {
+                  console.log("setting value", value);
+                  form.setValue("team", value);
+                }}
+                variant="label"
+              />
+            </div>
             {form.formState.errors && (
               <div className="text-destructive">
                 {form.formState.errors?.team?.message}
@@ -264,7 +275,7 @@ function EditStrideDialog({
 }
 
 export function AdminPage() {
-  const { data } = useFetch("/api/admin", "fetchAdminData");
+  const { data } = useFetch("/api/admin", ["fetchAdminData"]);
   console.log(data);
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
@@ -297,7 +308,7 @@ export function AdminPage() {
   return (
     <Card className="w-full h-full ">
       <CardHeader className="px-3 md:px-6">
-        <h1 className="text-2xl border-b-2 pb-3 mb-5">Admin</h1>
+        {/* <h1 className="text-2xl border-b-2 pb-3 mb-5">Admin</h1> */}
         <CardTitle>Strides</CardTitle>
         <CardDescription>
           View and manage strides across different locations.
