@@ -148,6 +148,25 @@ async function updateStride(req, res, next) {
   }
 }
 
+async function getMyStrides(req, res, next) {
+  const { userId } = req.params;
+  try {
+    const text = `
+    SELECT strides.id as id, strides.created_at, strides.distance, strides.time_in_minutes as duration, teams.name as team_name 
+    FROM strides
+    INNER JOIN teams ON teams.id = strides.team_id
+    WHERE strides.user_id = $1
+    ORDER BY strides.created_at DESC;
+    `;
+    const values = [userId];
+    const data = await db.query(text, values);
+    res.status(200).json(data.rows);
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ error: e.message });
+  }
+}
+
 module.exports = {
   getStridesByCountry,
   getAllStridesLocation,
@@ -157,4 +176,5 @@ module.exports = {
   addStride,
   deleteStride,
   updateStride,
+  getMyStrides,
 };
