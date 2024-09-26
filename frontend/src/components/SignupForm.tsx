@@ -67,7 +67,7 @@ const formSchema = z.object({
       message: "Password must be at least 2 characters.",
     })
     .max(50),
-  country: z.string({ required_error: "Please select a country" }),
+  country: z.number({ required_error: "Please select a country" }),
 });
 
 export default function SignupForm() {
@@ -87,11 +87,10 @@ export default function SignupForm() {
   } = form;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
     const token = await authService.signup(values);
     localStorage.setItem("jwt", JSON.stringify(token));
     navigate("/");
-    triggerToast("signup", capitalizeFirstLetter(values.username));
+    triggerToast("signup", { data: capitalizeFirstLetter(values.username) });
   }
 
   return (

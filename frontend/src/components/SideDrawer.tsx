@@ -12,6 +12,7 @@ import { NavbarLinks } from "./NavbarLinks";
 import { useUser } from "./UserProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
+import { AdminBadge } from "./AdminBadge";
 
 export function SideDrawer({
   trigger,
@@ -47,7 +48,7 @@ export function SideDrawer({
               </Link>
               <div className="ml-3 ">
                 <div className="text-base font-medium text-gray-800">
-                  {user?.username}
+                  {user?.username} <AdminBadge />
                 </div>
                 <div className="text-sm font-medium text-gray-500">
                   {user?.email}

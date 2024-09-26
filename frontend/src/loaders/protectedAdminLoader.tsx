@@ -1,14 +1,14 @@
-import { useUser } from "@/components/UserProvider";
 import React from "react";
-import { Outlet, redirect, useNavigate } from "react-router";
+import { Outlet, redirect } from "react-router";
 
 export const protectedAdminLoader = () => {
   const jwt = localStorage.getItem("jwt");
-  const token = JSON.parse(jwt as string);
-  const { role } = JSON.parse(atob(token.split(".")[1]));
-  console.log("role", role);
-  if (role !== "admin") {
-    return redirect("../");
+  if (jwt === null) return redirect("../");
+  if (jwt !== null) {
+    const { role } = JSON.parse(atob(jwt.split(".")[1]));
+    if (role !== "admin") {
+      return redirect("../");
+    }
   }
   return (
     <div>

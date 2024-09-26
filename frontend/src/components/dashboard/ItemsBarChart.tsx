@@ -50,7 +50,7 @@ const chartData = data.map((i, idx) => ({ ...i, fill: colors[idx] }));
 
 export function ItemsBarChart() {
   // const { data, isPending } = useFetch("/api/items/totals", "ItemsBarChart");
-  // console.log("ho", data);
+
   // if (isPending) {
   //   return <h1>Loading...</h1>;
   // }
