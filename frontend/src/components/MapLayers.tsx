@@ -1,6 +1,6 @@
 import React from "react";
 import { Source, Layer, LayerProps } from "react-map-gl";
-import stridesData from "../data/strides-global-clean.json";
+import { useFetch } from "@/hooks/use-fetch";
 
 export const clusterLayer: LayerProps = {
   id: "clusters",
@@ -49,7 +49,7 @@ export const unclusteredPointLayer: LayerProps = {
 const convertJsonToGeoData = (jsonData) => {
   return {
     type: "FeatureCollection",
-    features: jsonData.map(({ id, latitude, longitude }) => ({
+    features: jsonData?.map(({ id, latitude, longitude }) => ({
       type: "Feature",
       geometry: {
         coordinates: [longitude, latitude],
@@ -63,16 +63,22 @@ const convertJsonToGeoData = (jsonData) => {
 };
 
 export const MapLayers = () => {
-  const strides = stridesData;
-  const mapMarkers = React.useMemo(
-    () => convertJsonToGeoData(strides),
-    [strides]
+  const { data } = useFetch("/api/strides/location", ["fetchStrideLocations"]);
+  // const strides = stridesData;
+  // const mapMarkers = React.useMemo(
+  //   () => convertJsonToGeoData(strides),
+  //   [strides]
+  // );
+  const currMapMarkers = React.useMemo(
+    () => convertJsonToGeoData(data),
+    [data]
   );
+
   return (
     <Source
       id="strides-data"
       type="geojson"
-      data={mapMarkers}
+      data={currMapMarkers}
       cluster={true}
       clusterMaxZoom={14}
       clusterRadius={50}

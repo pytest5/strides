@@ -1,13 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import {
-  X,
-  ChevronRight,
-  ChevronLeft,
-  Search,
-  SlidersHorizontal,
-  Menu,
-} from "lucide-react";
+import { useState } from "react";
+import { ChevronRight, ChevronLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -20,47 +13,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { StridesMap } from "./StridesMap";
 import { FrostedCardWrapper } from "./FrostedCardWrapper";
-import fetchCountries from "@/utils/fetch-countries.ts";
 import { TotalsOverview } from "./dashboard/TotalsOverview";
 import { ItemsBarChart } from "./dashboard/ItemsBarChart";
 import { ItemsPieChart } from "./dashboard/ItemsPieChart";
 import { SideDrawer } from "./SideDrawer";
 import { DialogFilterButton } from "./DialogFilterButton";
+import { useFetch } from "@/hooks/use-fetch";
 import fetchCountryCoords from "@/utils/fetchCountryCoords";
 
 export function Dashboard() {
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  // const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  console.log(searchTerm);
-  const countryCoords = fetchCountryCoords();
+  const { data } = useFetch("/api/strides/location", ["fetchStrideLocations"]);
+  const countryCoords = fetchCountryCoords(data);
   const mapRef = React.useRef(null);
 
-  console.log(countryCoords);
+  interface CountryPosition {
+    latitude: number;
+    longitude: number;
+  }
 
-  const handleSelectCountry = (e) => {
-    setSelectedCountry(e);
-    const { latitude, longitude } = countryCoords.find(
-      (i) => i.name === e
-    ).coordinates;
-    console.log("Flying to:  ", latitude, longitude);
-    mapRef.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 4,
-      duration: 12000,
-      essential: true,
-    });
+  type CountryCoord = { name: string; coordinates: CountryPosition };
 
-    // setTimeout(() => {
-    //   mapRef.current.resize();
-    // }, 500);
+  const countryCoordsTyped: CountryCoord[] = countryCoords;
+
+  const handleSelectCountry = (countryName: string) => {
+    setSelectedCountry(countryName);
+    const selectedCountry = countryCoordsTyped.find(
+      (i) => i.name === countryName
+    );
+    if (selectedCountry) {
+      const { latitude, longitude } = selectedCountry.coordinates;
+      console.log("Flying to:  ", latitude, longitude);
+      if (mapRef.current) {
+        mapRef.current.flyTo({
+          center: [longitude, latitude],
+          zoom: 4,
+          duration: 12000,
+          essential: true,
+        });
+      }
+    }
   };
-
-  // const closeLocationCard = () => {
-  //   setSelectedLocation(null);
-  // };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -115,7 +111,7 @@ export function Dashboard() {
                   className="mb-2"
                 />
               </div>
-              {countryCoords.map((country) => (
+              {countryCoords?.map((country) => (
                 <SelectItem key={country.name} value={country.name}>
                   {country.name}
                 </SelectItem>

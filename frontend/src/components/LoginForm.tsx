@@ -51,7 +51,6 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
-  const countries = fetchCountries();
   const triggerToast = useTriggerToast();
   const { setUser, setIsLoggedIn, setIsAdmin, setJwtToken } = useUser();
   const navigate = useNavigate();

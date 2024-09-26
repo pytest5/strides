@@ -26,6 +26,7 @@ interface UserContextType {
   isLoggedIn: boolean;
   isAdmin: boolean;
   jwtToken: string;
+  setJwtToken: () => void;
   setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }

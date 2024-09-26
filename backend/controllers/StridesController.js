@@ -18,7 +18,7 @@ async function getStridesByCountry(req, res, next) {
 async function getAllStridesLocation(req, res, next) {
   try {
     const text =
-      "SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM strides_location";
+      "SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM curr_strides_location";
     const data = await db.query(text);
     res.status(200).json(data.rows);
   } catch (e) {

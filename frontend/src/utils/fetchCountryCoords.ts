@@ -1,17 +1,27 @@
-import stridesData from "../data/strides-global-clean.json";
 import countriesPositionData from "../data/countriesPosition.json";
 
-const fetchCountryCoords = () => {
-  // fetch country data from db
-  const allCountries = stridesData.map((i) => i.country);
+interface CountryPosition {
+  latitude: number;
+  longitude: number;
+}
 
-  const uniqueCountries = allCountries.reduce<string[]>(
+const countriesPositionDataTyped: Record<string, CountryPosition> =
+  countriesPositionData;
+
+interface Stride {
+  country: string;
+}
+
+const fetchCountryCoords = (data: Stride[]) => {
+  // fetch country data from db
+  const allCountries = data?.map((i: Stride) => i.country);
+  const uniqueCountries = allCountries?.reduce<string[]>(
     (a, c) => (a.includes(c) ? a : a.concat(c)),
     []
   );
-  const uniqueCountriesWithCoords = uniqueCountries.map((i) => ({
+  const uniqueCountriesWithCoords = uniqueCountries?.map((i) => ({
     name: i,
-    coordinates: countriesPositionData[i],
+    coordinates: countriesPositionDataTyped[i] || undefined,
   }));
 
   return uniqueCountriesWithCoords;

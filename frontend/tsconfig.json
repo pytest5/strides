@@ -10,8 +10,8 @@
       "@/*": ["./src/*"]
     },
     "types": ["node"],
-    "strict": false,
-    "noEmitOnError": false,
-    "skipLibCheck": true
+    "strict": false, // was false
+    "noEmitOnError": false, // remove
+    "skipLibCheck": true // remove
   }
 }
