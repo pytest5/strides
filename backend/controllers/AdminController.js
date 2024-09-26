@@ -19,6 +19,7 @@ async function getAdminData(req, res, next) {
     INNER JOIN countries on strides.country_id = countries.id
     INNER JOIN users on strides.user_id = users.id
     LEFT JOIN teams on strides.team_id = teams.id
+    ORDER BY strides.created_at DESC;
     `;
     const data = await db.query(text);
     res.status(200).json(data.rows);

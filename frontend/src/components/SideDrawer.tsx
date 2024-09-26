@@ -63,16 +63,16 @@ export function SideDrawer({
             >
               Dashboard
             </NavbarLink>
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <SheetClose asChild>
                 <NavbarLink
                   to="/strides/add"
                   className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
                 >
-                  Stride
+                  Add stride
                 </NavbarLink>
               </SheetClose>
-            )}
+            )} */}
             {isLoggedIn && (
               <SheetClose asChild>
                 <NavbarLink
@@ -101,7 +101,7 @@ export function SideDrawer({
                   isHorizontal ? horizontalStyles : verticalStyles
                 }`}
               >
-                About
+                Strides
                 <ChevronDown
                   className={`${
                     !isHorizontal
@@ -120,7 +120,18 @@ export function SideDrawer({
                       : ""
                   }`}
                 >
-                  <NavbarAboutUs className="py-1" />
+                  <div className="pl-4 py-1">
+                    <SheetClose asChild>
+                      <NavbarLink to="/strides/add" className="block text-base">
+                        Add stride
+                      </NavbarLink>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <NavbarLink to="/strides" className="block text-base">
+                        My strides
+                      </NavbarLink>
+                    </SheetClose>
+                  </div>
                 </div>
               )}
             </div>

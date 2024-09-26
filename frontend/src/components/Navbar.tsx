@@ -60,7 +60,7 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="siconm"
+                  size="icon"
                   className="rounded-full space-x-1"
                 >
                   <>

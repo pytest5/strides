@@ -14,6 +14,7 @@ import { ItemsBarChart } from "./components/dashboard/ItemsBarChart.tsx";
 import AddStridesPage from "./pages/AddStridesPage.tsx";
 import TeamsPage from "./pages/TeamsPage.tsx";
 import AddTeamPage from "./pages/AddTeamPage.tsx";
+import { MyStridesPage } from "./pages/MyStridesPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
           {
             loader: protectedLoader,
             children: [
+              { path: "strides", element: <MyStridesPage /> },
               { path: "strides/add", element: <AddStridesPage /> },
               { path: "teams/add", element: <AddTeamPage /> },
               { path: "teams", element: <TeamsPage /> },

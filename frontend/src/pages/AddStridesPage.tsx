@@ -17,13 +17,14 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { submitStride, Location } from "@/services/stridesService";
 import { useUser } from "@/components/UserProvider";
 import { useGeoLocation } from "@/hooks/use-geo-location";
 import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export type AddStrideFormDataType = z.infer<typeof formSchema>;
 
@@ -76,6 +77,8 @@ export default function AddStridesPage() {
   const { jwtToken } = useUser();
   const { location } = useGeoLocation();
   const triggerToast = useTriggerToast();
+  const queryClient = useQueryClient();
+
   console.log(triggerToast);
 
   const mutation = useMutation({
@@ -84,6 +87,7 @@ export default function AddStridesPage() {
     },
     onSuccess: (data, variable, context) => {
       triggerToast("submit");
+      queryClient.invalidateQueries({ queryKey: ["fetchMyStrides"] });
     },
     // onSuccess: (data, variable, context) => {
     //   triggerToast("submit");
@@ -144,6 +148,10 @@ export default function AddStridesPage() {
     setValue(lowerCaseCategory, currentValue + 1);
     setSelectedCategory(lowerCaseCategory);
   };
+
+  if (mutation.isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex flex-col md:flex-row bg-gray-100 text-foreground h-full ">

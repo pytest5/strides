@@ -31,14 +31,14 @@ export const HorizontalNavbarLinks = ({
       >
         Dashboard
       </NavbarLink>
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <NavbarLink
           to="/strides/add"
           className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
         >
           Stride
         </NavbarLink>
-      )}
+      )} */}
       {isLoggedIn && (
         <NavbarLink
           to="/teams"
@@ -55,34 +55,36 @@ export const HorizontalNavbarLinks = ({
           Admin
         </NavbarLink>
       )}
-      <div className={`${isHorizontal ? "relative" : ""}`}>
-        <button
-          onClick={() => setIsAboutOpen(!isAboutOpen)}
-          className={`${isHorizontal ? horizontalStyles : verticalStyles}`}
-        >
-          About
-          <ChevronDown
-            className={`${
-              !isHorizontal
-                ? `h-5 w-5 transform ${
-                    isAboutOpen ? "rotate-180" : ""
-                  } transition-transform duration-200`
-                : "ml-1 h-4 w-4"
-            }`}
-          />
-        </button>
-        {isAboutOpen && (
-          <div
-            className={`${
-              isHorizontal
-                ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                : ""
-            }`}
+      {isLoggedIn && (
+        <div className={`${isHorizontal ? "relative" : ""}`}>
+          <button
+            onClick={() => setIsAboutOpen(!isAboutOpen)}
+            className={`${isHorizontal ? horizontalStyles : verticalStyles}`}
           >
-            <NavbarAboutUs className="py-1" />
-          </div>
-        )}
-      </div>
+            Strides
+            <ChevronDown
+              className={`${
+                !isHorizontal
+                  ? `h-5 w-5 transform ${
+                      isAboutOpen ? "rotate-180" : ""
+                    } transition-transform duration-200`
+                  : "ml-1 h-4 w-4"
+              }`}
+            />
+          </button>
+          {isAboutOpen && (
+            <div
+              className={`${
+                isHorizontal
+                  ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  : ""
+              }`}
+            >
+              <NavbarAboutUs className="py-1" />
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };

@@ -22,6 +22,10 @@ interface Message {
     title: string;
     description: string;
   };
+  leaveTeam: {
+    title: string;
+    description: string;
+  };
 }
 
 interface Options {
@@ -32,7 +36,13 @@ interface Options {
 
 export const useTriggerToast = () => {
   const triggerToast = (
-    variant: "logout" | "login" | "signup" | "submit" | "alreadyInTeam",
+    variant:
+      | "logout"
+      | "login"
+      | "signup"
+      | "submit"
+      | "alreadyInTeam"
+      | "leaveTeam",
     options?: Options
   ) => {
     const { type, data, duration = 3000 } = options || {};
@@ -56,6 +66,10 @@ export const useTriggerToast = () => {
       alreadyInTeam: {
         title: "Already in Team",
         description: `You're already a member of this team, ${data}.`,
+      },
+      leaveTeam: {
+        title: "Left Team Successfully",
+        description: `You have successfully left the team.`,
       },
     };
     setTimeout(() => {
