@@ -36,6 +36,7 @@ router.get("/admin", checkIsAdmin, async (req, res) => {
     ON teams.id = users_teams.team_id
     INNER JOIN users
     ON users_teams.user_id = users.id
+    ORDER BY teams.created_at DESC;
     `;
     const values = [];
     const result = await db.query(text, values);
@@ -49,7 +50,10 @@ router.get("/admin", checkIsAdmin, async (req, res) => {
 // get all public teams
 router.get("/public", async (req, res) => {
   try {
-    const text = "SELECT * FROM TEAMS WHERE ispublic = TRUE";
+    const text = `
+    SELECT * FROM TEAMS WHERE ispublic = TRUE
+    ORDER BY teams.created_at DESC;    
+    `;
     const values = [];
     const result = await db.query(text, values);
     res.status(200).json(result.rows);
@@ -97,7 +101,10 @@ router.get("/my", async (req, res) => {
     FROM teams 
     INNER JOIN users_teams
     ON teams.id = users_teams.team_id
-    WHERE users_teams.user_id = $1`;
+    WHERE users_teams.user_id = $1
+    ORDER BY teams.created_at DESC;
+`;
+
     const values = [id];
     const result = await db.query(text, values);
     res.status(200).json(result.rows);

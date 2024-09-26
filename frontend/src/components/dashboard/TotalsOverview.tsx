@@ -18,16 +18,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 interface StatItem {
   icon: React.ReactNode;
   label: string;
   value: string;
   color: string;
 }
-
-// interface StatItems {
-//   stats: StatItem[];
-// }
 
 const colors = [
   "hsl(0, 100%, 83.92156862745098%)",
@@ -95,7 +92,6 @@ export const TotalsOverview = () => {
   // );
   // if (isFetching) return <h1>"Loading for the first time"</h1>;
   // if (isPending) return <h1>"Refetching data in the background"</h1>;
-
   const statsData = [
     data[0].total_strides_countries,
     data[0].total_strides_users,

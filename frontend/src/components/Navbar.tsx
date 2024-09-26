@@ -63,10 +63,10 @@ export default function Navbar() {
                   size="icon"
                   className="rounded-full space-x-1"
                 >
-                  <>
+                  <div>
                     <UserAvatar className="h-7 w-7 border-2" />
                     <AdminBadge />
-                  </>
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
