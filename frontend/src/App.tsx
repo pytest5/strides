@@ -12,34 +12,10 @@ import { StridesMap } from "./components/StridesMap.tsx";
 import { Dashboard } from "./components/Dashboard.tsx";
 import { ItemsBarChart } from "./components/dashboard/ItemsBarChart.tsx";
 import AddStridesPage from "./pages/AddStridesPage.tsx";
+import TeamsPage from "./pages/TeamsPage.tsx";
+import AddTeamPage from "./pages/AddTeamPage.tsx";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   // element: <Layout />,
-  //   element: <LandingPage />,
-  //   children: [
-  //     { index: true, element: <Dashboard /> },
-  //     {
-  //       path: "admin-login",
-  //       // element: <LoginPage />,
-  //       // action: LoginPage.action,
-  //     },
-  //     {
-  //       path: "user-login",
-  //       // element: <LoginPage />,
-  //       // action: AdminLoginPage.action,
-  //     },
-  //     {
-  //       loader: protectedLoader,
-  //       children: [
-  //         { path: "admin", element: <AdminPage /> },
-  //         { path: "admin/profile", element: <ProfilePage /> },
-  //       ],
-  //     },
-  //   ],
-  // },
-
   {
     path: "/",
     element: <UserProvider />,
@@ -65,15 +41,18 @@ const router = createBrowserRouter([
           },
           {
             loader: protectedLoader,
-            children: [{ path: "strides/add", element: <AddStridesPage /> }],
+            children: [
+              { path: "strides/add", element: <AddStridesPage /> },
+              { path: "teams/add", element: <AddTeamPage /> },
+              { path: "teams", element: <TeamsPage /> },
+            ],
           },
           {
-            loader: protectedLoader, // TODO: CHANGE TO PROTECTED ADMIN LOADER
+            loader: protectedAdminLoader, // TODO: CHANGE TO PROTECTED ADMIN LOADER
             children: [
               // { path: "admin", element: <AdminPage /> },
               { path: "admin", element: <AdminPage /> },
-
-              { path: "admin/profile", element: <ProfilePage /> },
+              // { path: "admin/profile", element: <ProfilePage /> },
             ],
           },
         ],
@@ -90,10 +69,6 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
-      },
-      {
-        path: "test",
-        element: <ItemsBarChart />,
       },
     ],
   },
