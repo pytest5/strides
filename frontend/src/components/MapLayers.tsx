@@ -1,6 +1,7 @@
 import React from "react";
 import { Source, Layer, LayerProps } from "react-map-gl";
 import { useFetch } from "@/hooks/use-fetch";
+import LoadingSpinner from "./LoadingSpinner";
 
 export const clusterLayer: LayerProps = {
   id: "clusters",
@@ -63,7 +64,9 @@ const convertJsonToGeoData = (jsonData) => {
 };
 
 export const MapLayers = () => {
-  const { data } = useFetch("/api/strides/location", ["fetchStrideLocations"]);
+  const { data, isPending } = useFetch("/api/strides/location", [
+    "fetchStrideLocations",
+  ]);
   // const strides = stridesData;
   // const mapMarkers = React.useMemo(
   //   () => convertJsonToGeoData(strides),
@@ -73,6 +76,10 @@ export const MapLayers = () => {
     () => convertJsonToGeoData(data),
     [data]
   );
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Source

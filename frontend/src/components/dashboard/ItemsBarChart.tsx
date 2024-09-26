@@ -1,5 +1,5 @@
-import { Monitor, TrendingUp } from "lucide-react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import data from "../../data/mockData.json";
 
 import {
@@ -17,6 +17,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useFetch } from "@/hooks/use-fetch";
+import LoadingSpinner from "../LoadingSpinner";
 export const description = "A horizontal bar chart";
 
 const chartConfig = {
@@ -25,12 +26,6 @@ const chartConfig = {
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
-// const chartConfig = {
-//   desktop: {
-//     label: "Desktop",
-//     color: "hsl(var(--chart-1))",
-//   },
-// } satisfies ChartConfig;
 
 const colors = [
   "#ffadad",
@@ -49,10 +44,14 @@ const colors = [
 const chartData = data.map((i, idx) => ({ ...i, fill: colors[idx] }));
 
 export function ItemsBarChart() {
-  // const { data, isPending } = useFetch("/api/items/totals", "ItemsBarChart");
+  // TODO PUT THIS IN DB
+  // const { data, isPending } = useFetch("/api/items/current/totals", [
+  //   "fetchCurrItemsTotals",
+  // ]);
+  // const chartData = data?.map((i, idx) => ({ ...i, fill: colors[idx] }));
 
   // if (isPending) {
-  //   return <h1>Loading...</h1>;
+  //   return <LoadingSpinner />;
   // }
 
   return (
@@ -112,83 +111,3 @@ export function ItemsBarChart() {
     // </div>
   );
 }
-
-// [
-//   {
-//     name: "Others",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/9/11.png",
-//     value: 243291,
-//   },
-//   {
-//     name: "Cigarette",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/4/17.png",
-//     value: 201758,
-//   },
-//   {
-//     name: "Packaging",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/5/12.png",
-//     value: 123304,
-//   },
-//   {
-//     name: "Plastic - Wrapper",
-//     material_type: "Plastic",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/3/12.png",
-//     value: 46674,
-//   },
-//   {
-//     name: "Tissue",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/12/13.png",
-//     value: 46033,
-//   },
-//   {
-//     name: "Bags",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/1/10.png",
-//     value: 43336,
-//   },
-//   {
-//     name: "Plastic - Bottle",
-//     material_type: "Plastic",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/2/8.png",
-//     value: 42772,
-//   },
-//   {
-//     name: "Metal - Can",
-//     material_type: "Metal",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/8/3.png",
-//     value: 41383,
-//   },
-//   {
-//     name: "Glass - Bottle",
-//     material_type: "Glass",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/7/9.png",
-//     value: 15796,
-//   },
-//   {
-//     name: "Cups",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/13/14.png",
-//     value: 13705,
-//   },
-//   {
-//     name: "Mask",
-//     material_type: "NA",
-//     image_url:
-//       "https://storage.googleapis.com/stridy-assets/uploads/pickup_item/image/6/7.png",
-//     value: 7898,
-//   },
-// ];
