@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -101,7 +100,7 @@ export function Dashboard() {
           </Button>
         </div>
         {/* Navbar */}
-        <div className="relative flex flex-1 items-center gap-3 sm:absolute sm:top-4 sm:right-4 ">
+        <div className="relative flex flex-1 items-center justify-end gap-3 sm:absolute sm:top-4 sm:right-4 ">
           {/* Country finder */}
           <Select onValueChange={handleSelectCountry}>
             <SelectTrigger className="w-[120px] sm:w-[160px] bg-gray-00/10 backdrop-blur-sm text-white">
@@ -128,7 +127,7 @@ export function Dashboard() {
           <SideDrawer
             trigger={
               <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
-                <Menu className="block h-6 w-6" />
+                <Menu className="block h-6 w-6 text-white" />
               </button>
             }
           />
