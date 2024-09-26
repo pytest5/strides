@@ -9,6 +9,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node"]
+    "types": ["node"],
+    "strict": false,
+    "noEmitOnError": false,
+    "skipLibCheck": true
   }
 }
