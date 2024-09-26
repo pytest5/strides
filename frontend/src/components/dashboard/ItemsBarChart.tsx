@@ -1,5 +1,5 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import data from "../../data/mockData.json";
 
 import {
@@ -56,25 +56,26 @@ export function ItemsBarChart() {
 
   return (
     // <div className="relative overflow-hidden rounded-lg bg-background/80 p-6 shadow-lg backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
-    <Card className="bg-transparent border-none shadow-none ">
-      <CardHeader className="p-0 pb-1">
+    <Card className="bg-transparent border-none shadow-none overflow-auto ">
+      <CardHeader className="p-1 pb-1">
         <CardTitle>Top items collected breakdown</CardTitle>
         <CardDescription>Cumulative data as of 2024</CardDescription>
       </CardHeader>
-      <CardContent className="p-0 pb-1">
-        <ChartContainer config={chartConfig} className="min-h-[350px] w-full">
+      <CardContent className="p-0 pb-1 ">
+        <ChartContainer config={chartConfig} className="min-h-[300px]">
+          {/* <ResponsiveContainer> */}
           <BarChart
             accessibilityLayer
             data={chartData}
             layout="vertical"
-            height={250}
+            // height={550}
             margin={{
               left: 10, // Increased left margin for Y-axis labels
-              top: 20,
-              bottom: 20,
+              top: 10,
+              bottom: 10,
               right: 20,
             }}
-            barSize={23}
+            // barSize={23}
             // barGap={140}
             // barCategoryGap={90}
           >
@@ -97,9 +98,10 @@ export function ItemsBarChart() {
             />
             <Bar dataKey="value" fill="var(--color-desktop)" radius={5} />
           </BarChart>
+          {/* </ResponsiveContainer> */}
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm p-0 pt-0 ">
+      <CardFooter className="flex-col items-start gap-2 text-sm p-1 pt-0 ">
         <div className="flex gap-2 font-medium leading-none">
           Growing collection over time <TrendingUp className="h-4 w-4" />
         </div>

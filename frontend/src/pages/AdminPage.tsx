@@ -45,6 +45,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface Stride {
   strides_id: number;
@@ -275,7 +276,7 @@ function EditStrideDialog({
 }
 
 export function AdminPage() {
-  const { data } = useFetch("/api/admin", ["fetchAdminData"]);
+  const { data, isPending } = useFetch("/api/admin", ["fetchAdminData"]);
   console.log(data);
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
@@ -298,12 +299,12 @@ export function AdminPage() {
     if (!jwtToken) {
       throw new Error("Invalid token, unable to delete stride");
     }
-
-    console.log("handling delete");
-    console.log("TOKEN", jwtToken);
-
     mutate({ strideId, jwtToken });
   };
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Card className="w-full h-full ">
@@ -383,9 +384,9 @@ export function AdminPage() {
                               })
                             }
                           />
-                          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                          {/* <DropdownMenuItem>Duplicate</DropdownMenuItem> */}
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>Archive</DropdownMenuItem>
+                          {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
                           <DropdownMenuItem
                             onClick={() => {
                               handleDelete(stride.strides_id);

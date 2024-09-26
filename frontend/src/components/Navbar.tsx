@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "./UserAvatar.js";
 import { AdminBadge } from "./AdminBadge.js";
+import { HorizontalNavbarLinks } from "./HorizontalNavbarLinks.js";
 
 export default function Navbar() {
   const { user, isLoggedIn, isAdmin } = useUser();
@@ -27,11 +28,11 @@ export default function Navbar() {
       <div className="w-full px-4 sm:px-6 lg:px-8 flex sm:flex-row justify-between items-center">
         <div className="flex">
           <Link to="/" className="flex-shrink-0 flex items-center">
-            <span className="text-xl font-bold text-gray-800">YEET</span>
+            <span className="text-xl font-bold text-gray-800">Strides</span>
           </Link>
         </div>
         <div className="hidden sm:flex md:ml-6  md:items-center">
-          <NavbarLinks variant="horizontal" />
+          <HorizontalNavbarLinks variant="horizontal" />
         </div>
         <div className="hidden md:ml-6 sm:flex md:items-center space-x-2">
           <Button
@@ -71,9 +72,15 @@ export default function Navbar() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="dashboard">Dashboard</Link>
+                </DropdownMenuItem>
+                {/* <DropdownMenuItem asChild>
+                  <Link to=''>Settings</Link>
+                </DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => ""}>Logout</DropdownMenuItem>
               </DropdownMenuContent>

@@ -39,7 +39,7 @@ export const DashboardNavbar = () => {
         }`}
       >
         <IoLogoAppleAr size={24} />
-        {!isCollapsed && <span className="font-bold text-xl">Yeet</span>}
+        {!isCollapsed && <span className="font-bold text-xl">Strides</span>}
       </div>
       <nav className="flex-1 mt-8 ">
         {navItems.map((item, index) => (

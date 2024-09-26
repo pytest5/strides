@@ -20,13 +20,16 @@ import { SideDrawer } from "./SideDrawer";
 import { DialogFilterButton } from "./DialogFilterButton";
 import { useFetch } from "@/hooks/use-fetch";
 import fetchCountryCoords from "@/utils/fetchCountryCoords";
+import LoadingSpinner from "./LoadingSpinner";
 
 export function Dashboard() {
   // const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data } = useFetch("/api/strides/location", ["fetchStrideLocations"]);
+  const { data, isPending } = useFetch("/api/strides/location", [
+    "fetchStrideLocations",
+  ]);
   const countryCoords = fetchCountryCoords(data);
   const mapRef = React.useRef(null);
 
@@ -61,6 +64,10 @@ export function Dashboard() {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="h-full flex flex-col relative ">
@@ -160,7 +167,7 @@ export function Dashboard() {
             {/* Leader board */}
             <FrostedCardWrapper>
               <CardContent className="p-4">
-                <h3 className="font-bold mb-2">Yeet Leaderboard</h3>
+                <h3 className="font-bold mb-2">STRIDES Leaderboard</h3>
                 <ol className="list-decimal list-inside">
                   <li>
                     Marcel Smits{" "}

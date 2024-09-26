@@ -13,6 +13,10 @@ import { useUser } from "./UserProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { AdminBadge } from "./AdminBadge";
+import { NavbarLink } from "./NavbarLink";
+import { ChevronDown } from "lucide-react";
+import { NavbarAboutUs } from "./NavbarAboutUs";
+import React from "react";
 
 export function SideDrawer({
   trigger,
@@ -21,20 +25,106 @@ export function SideDrawer({
   trigger?: React.ReactNode;
   side?: "left" | "right";
 }) {
-  const { user, isLoggedIn, logout } = useUser();
+  const { user, isAdmin, isLoggedIn, logout } = useUser();
   const navigate = useNavigate();
   const triggerToast = useTriggerToast();
+  const [isAboutOpen, setIsAboutOpen] = React.useState(false);
+
+  const isHorizontal = false;
+
+  const verticalStyles =
+    "flex justify-between w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200";
+  const horizontalStyles =
+    "px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out inline-flex items-center";
+
   return (
     <Sheet>
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent side={side} className="flex flex-col">
         <SheetHeader>
           <SheetTitle>
-            <Link to="/">Yeet</Link>
+            <Link to="/">Strides</Link>
           </SheetTitle>
         </SheetHeader>
         <div className="pt-6 pb-3 space-y-1">
-          <NavbarLinks />
+          {/* <NavbarLinks /> */}
+          <>
+            <SheetClose asChild>
+              <NavbarLink
+                to="/"
+                className={`${!isHorizontal ? "block text-base" : "text-sm "}`}
+              >
+                Home
+              </NavbarLink>
+            </SheetClose>
+            <NavbarLink
+              to="/dashboard"
+              className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+            >
+              Dashboard
+            </NavbarLink>
+            {isLoggedIn && (
+              <SheetClose asChild>
+                <NavbarLink
+                  to="/strides/add"
+                  className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+                >
+                  Stride
+                </NavbarLink>
+              </SheetClose>
+            )}
+            {isLoggedIn && (
+              <SheetClose asChild>
+                <NavbarLink
+                  to="/teams"
+                  className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+                >
+                  Teams
+                </NavbarLink>
+              </SheetClose>
+            )}
+            {isAdmin && (
+              <SheetClose asChild>
+                <NavbarLink
+                  to="/admin"
+                  className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+                >
+                  Admin
+                </NavbarLink>
+              </SheetClose>
+            )}
+
+            <div className={`${isHorizontal ? "relative" : ""}`}>
+              <button
+                onClick={() => setIsAboutOpen(!isAboutOpen)}
+                className={`${
+                  isHorizontal ? horizontalStyles : verticalStyles
+                }`}
+              >
+                About
+                <ChevronDown
+                  className={`${
+                    !isHorizontal
+                      ? `h-5 w-5 transform ${
+                          isAboutOpen ? "rotate-180" : ""
+                        } transition-transform duration-200`
+                      : "ml-1 h-4 w-4"
+                  }`}
+                />
+              </button>
+              {isAboutOpen && (
+                <div
+                  className={`${
+                    isHorizontal
+                      ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                      : ""
+                  }`}
+                >
+                  <NavbarAboutUs className="py-1" />
+                </div>
+              )}
+            </div>
+          </>
         </div>
         <SheetFooter className="mt-auto border-t border-gray-200 sm:flex-col-reverse ">
           {isLoggedIn && (

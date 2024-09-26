@@ -4,7 +4,11 @@ import { ChevronDown } from "lucide-react";
 import { NavbarAboutUs } from "./NavbarAboutUs";
 import { useUser } from "./UserProvider";
 
-export const NavbarLinks = ({ variant }: { variant?: "horizontal" }) => {
+export const HorizontalNavbarLinks = ({
+  variant,
+}: {
+  variant?: "horizontal";
+}) => {
   const [isAboutOpen, setIsAboutOpen] = React.useState(false);
   const { isAdmin, isLoggedIn } = useUser();
   const isHorizontal = variant === "horizontal";
