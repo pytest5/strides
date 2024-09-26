@@ -12,11 +12,11 @@ pool.on("connect", (client) => console.log("connected to pg db"));
 
 const query = (text, params, callback) => {
   const res = pool.query(text, params, callback);
-  console.log(
-    `Executing: ${text} Params: ${params?.join(", ") || "n.a."} Rows: ${
-      res.rowCount || "n.a."
-    }`
-  );
+  // console.log(
+  //   `Executing: ${text} Params: ${params?.join(", ") || "n.a."} Rows: ${
+  //     res.rowCount || "n.a."
+  //   }`
+  // );
   return res;
 };
 

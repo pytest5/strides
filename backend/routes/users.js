@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const verifyUserId = require("../middlewares/verifyUserId.js");
+const verifyUserId = require("../middlewares/checkIsAdmin.js");
 const { userSignup, userLogin } = require("../controllers/UsersController.js");
 
 router.post("/signup", userSignup);
@@ -49,7 +49,6 @@ router.delete("/:userId", verifyUserId, async (req, res) => {
 
 // get current user
 router.post("/current", async (req, res) => {
-  console.log("here");
   const { email } = req.body;
   console.log(email);
   const text = "SELECT * FROM users WHERE email = $1";

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const verifyUserId = require("../middlewares/verifyUserId.js");
+const verifyUserId = require("../middlewares/checkIsAdmin.js");
 
 // DEV create user
 router.post("/dev/users", async (req, res) => {

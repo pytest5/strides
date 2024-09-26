@@ -18,10 +18,11 @@ const stridesRouter = require("./routes/strides.js");
 const itemsRouter = require("./routes/items.js");
 const countriesRouter = require("./routes/countries.js");
 const adminRouter = require("./routes/admin.js");
+const verifyToken = require("./middlewares/verifyToken.js");
 
 app.use("/api/users", usersRouter);
 app.use("/api/admin", adminRouter);
-app.use("/api/teams", teamsRouter);
+app.use("/api/teams", verifyToken, teamsRouter);
 app.use("/api/items", itemsRouter);
 app.use("/api/countries", countriesRouter);
 app.use("/api/strides", stridesRouter);
