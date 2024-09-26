@@ -30,11 +30,6 @@ app.use("/api/strides", stridesRouter);
 // app.use("/dev", devRouter);
 // app.use("/teams", teamsRouter);
 
-app.get("/", async (req, res) => {
-  const result = await db.query("SELECT * FROM bands");
-  res.send(result);
-});
-
 app.use((err, req, res, next) => {
   console.error("error....", err);
   // Extract the message and stack to send a more useful response
