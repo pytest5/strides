@@ -19,6 +19,7 @@ import authService from "../services/authService.ts";
 import { useUser } from "./UserProvider.tsx";
 import { useTriggerToast } from "@/hooks/use-trigger-toast.ts";
 import fetchCountries from "@/utils/fetchCountries.ts";
+import { useMutation } from "@tanstack/react-query";
 
 async function action({
   params,
@@ -52,7 +53,7 @@ const formSchema = z.object({
 export default function LoginForm() {
   const countries = fetchCountries();
   const triggerToast = useTriggerToast();
-  const { setUser, user, setIsLoggedIn } = useUser();
+  const { setUser, setIsLoggedIn, setIsAdmin, setJwtToken } = useUser();
   const navigate = useNavigate();
   // 1. Define  form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,27 +69,33 @@ export default function LoginForm() {
     formState: { errors },
   } = form;
 
-  console.log("hi", errors);
-
-  // 2. Define submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    try {
-      const jwt = await authService.login(values);
+  const mutation = useMutation({
+    mutationFn: (data) => {
+      return authService.login(data);
+    },
+    onSuccess: (data) => {
+      const jwt = data;
+      console.log(jwt);
       localStorage.setItem("jwt", jwt);
       const user = JSON.parse(atob(jwt.split(".")[1]));
+      const { role } = user;
       setUser(user);
+      setJwtToken(jwt);
       setIsLoggedIn(true);
+      setIsAdmin(role === "admin");
       navigate("/");
-      triggerToast("login", user?.username);
-    } catch (e) {
-      console.error("Login error:", e); // Log the actual error
+      triggerToast("login", { data: user?.username });
+    },
+    onError: () => {
       setError("root", {
         type: "manual",
         message: "Invalid login details.",
       });
-    }
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    mutation.mutate(values);
   }
 
   return (
