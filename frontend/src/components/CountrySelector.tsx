@@ -34,15 +34,13 @@ const languages = [
   { label: "Korean", value: "ko" },
   { label: "Chinese", value: "zh" },
 ] as const;
-import { useFetch } from "@/hooks/use-fetch";
+import { useCountries } from "@/hooks/use-countries";
+import { useUser } from "./UserProvider";
+import LoadingSpinner from "./LoadingSpinner";
 
 export const CountrySelector = ({ field, form }) => {
-  const {
-    data: countries,
-    error,
-    isPending,
-  } = useFetch("/api/countries", "fetchCountries");
-  console.log(error);
+  const { jwtToken } = useUser();
+  const { data: countries, error, isPending } = useCountries(jwtToken);
 
   const arrayOfCountriesObj = countries?.map(
     ({ id, name }: { id: number; name: string }) => ({
@@ -55,8 +53,8 @@ export const CountrySelector = ({ field, form }) => {
   // const arrayOfCountriesObj = [];
   console.log(countries);
 
-  if (isPending) {
-    return <h1>Loading..</h1>;
+  if (isPending || !arrayOfCountriesObj) {
+    return <LoadingSpinner />;
   }
 
   return (
