@@ -2,9 +2,12 @@ import React from "react";
 import { NavbarLink } from "./NavbarLink";
 import { ChevronDown } from "lucide-react";
 import { NavbarAboutUs } from "./NavbarAboutUs";
+import { useUser } from "./UserProvider";
 
 export const NavbarLinks = ({ variant }: { variant?: "horizontal" }) => {
   const [isAboutOpen, setIsAboutOpen] = React.useState(false);
+  const { isAdmin, isLoggedIn } = useUser();
+
   const isHorizontal = variant === "horizontal";
   const verticalStyles =
     "flex justify-between w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200";
@@ -16,26 +19,50 @@ export const NavbarLinks = ({ variant }: { variant?: "horizontal" }) => {
         to="/"
         className={`${!isHorizontal ? "block text-base" : "text-sm "}`}
       >
-        Events
+        Home
       </NavbarLink>
-      <NavbarLink
+      {/* <NavbarLink
         to="/"
         className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
       >
         Impact
-      </NavbarLink>
-      <NavbarLink
+      </NavbarLink> */}
+      {/* <NavbarLink
         to="/"
         className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
       >
         Articles
-      </NavbarLink>
+      </NavbarLink> */}
       <NavbarLink
         to="/dashboard"
         className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
       >
         Dashboard
       </NavbarLink>
+      {isLoggedIn && (
+        <NavbarLink
+          to="/strides/add"
+          className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+        >
+          Stride
+        </NavbarLink>
+      )}
+      {isLoggedIn && (
+        <NavbarLink
+          to="/teams"
+          className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+        >
+          Teams
+        </NavbarLink>
+      )}
+      {isAdmin && (
+        <NavbarLink
+          to="/admin"
+          className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
+        >
+          Admin
+        </NavbarLink>
+      )}
       <div className={`${isHorizontal ? "relative" : ""}`}>
         <button
           onClick={() => setIsAboutOpen(!isAboutOpen)}
