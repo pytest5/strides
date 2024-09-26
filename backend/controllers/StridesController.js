@@ -84,12 +84,8 @@ async function addStride(req, res, next) {
       3, // time in minutes
       data.team ? Number(data.team) : null, // team_id
     ];
-
-    console.log("yo", strideValues);
-
     const result = await db.query(insertStrideText, strideValues);
     const strideId = result.rows[0].id;
-
     // Loop through items in req.body.data
     for (const [itemName, quantity] of Object.entries(data)) {
       if (quantity === 0) continue;
@@ -134,17 +130,18 @@ async function deleteStride(req, res, next) {
 
 async function updateStride(req, res, next) {
   const { strideData } = req.body;
-  console.log("yo", strideData);
+  const { distance, duration, team_id, strides_id } = strideData;
   try {
     const text = `
-    DELETE FROM strides
-    WHERE id =  $1;
+    UPDATE strides
+      SET distance = $1,
+          time_in_minutes = $2,
+          team_id = $3
+    WHERE id = $4;
     `;
-    // const values = [strideId];
-    // const data = await db.query(text, values);
-    // console.log(data);
-    res.status(200).json({ message: "lol" });
-    // res.status(200).json(data.rows);
+    const values = [distance, duration, team_id, strides_id];
+    const data = await db.query(text, values);
+    res.status(200).json({ message: "Updated stride successfully" });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ error: e.message });

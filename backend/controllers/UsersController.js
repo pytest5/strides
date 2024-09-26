@@ -34,6 +34,7 @@ async function userSignup(req, res, next) {
 
 async function userLogin(req, res, next) {
   const { email, password } = req.body;
+
   const text = `SELECT * FROM users WHERE email=$1`;
   const values = [email];
   const dbRes = await db.query(text, values);
@@ -42,7 +43,6 @@ async function userLogin(req, res, next) {
     return res.status(401).json({ error: "Invalid login details" });
   }
   const { password: hashedPassword, created_at, ...rest } = user;
-  console.log("login jwt", user);
   const isAuth = await bcrypt.compare(password, hashedPassword);
 
   if (!isAuth) {

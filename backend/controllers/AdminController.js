@@ -21,7 +21,6 @@ async function getAdminData(req, res, next) {
     LEFT JOIN teams on strides.team_id = teams.id
     `;
     const data = await db.query(text);
-    console.log(data);
     res.status(200).json(data.rows);
   } catch (e) {
     console.log(e.message);
