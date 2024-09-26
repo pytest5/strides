@@ -1,5 +1,6 @@
+import React from "react";
 import { useState } from "react";
-import { ChevronLeft, BadgeCheck, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,9 @@ import { useUser } from "@/components/UserProvider";
 import { DialogLogoutButton } from "@/components/DialogLogoutButton";
 import { Link } from "react-router-dom";
 import { UserAvatar } from "@/components/UserAvatar";
+import { AdminBadge } from "@/components/AdminBadge";
+import { capitalizeFirstLetter } from "@/utils";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const sidebarItems = [
   "Profile",
@@ -17,24 +21,22 @@ const sidebarItems = [
 ];
 
 export default function ProfilePage() {
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
 
   const [activeTab, setActiveTab] = useState("Profile");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("I own a computer.");
-  const [pushNotifications, setPushNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [bio, setBio] = useState("I believe in myself.");
 
-  const handleAddUrl = () => {
-    setUrls([...urls, ""]);
-  };
+  React.useEffect(() => {
+    if (!user) return;
+    setUsername(capitalizeFirstLetter(user?.username));
+    setEmail(user.email);
+  }, [user]);
 
-  const handleUrlChange = (index: number, value: string) => {
-    const newUrls = [...urls];
-    newUrls[index] = value;
-    setUrls(newUrls);
-  };
+  if (!user) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="bg-background h-full font-sans">
@@ -73,7 +75,9 @@ export default function ProfilePage() {
           </aside>
           <main className="flex-1 flex flex-col gap-6 ">
             <div>
-              <h2 className="text-2xl font-bold">Profile</h2>
+              <h2 className="text-2xl font-bold">
+                Profile <AdminBadge />
+              </h2>
               <p className="text-muted-foreground">
                 This is how others will see you on the site.
               </p>
@@ -91,7 +95,7 @@ export default function ProfilePage() {
                 />
                 <p className="text-sm text-muted-foreground mt-1">
                   This is your public display name. It can be your real name or
-                  a pseudonym. You can only change this once every 30 days.
+                  a pseudonym.
                 </p>
               </div>
               <div>
@@ -142,17 +146,14 @@ export default function ProfilePage() {
             <h1 className="text-xl font-semibold">Profile</h1>
           </div>
         </header>
-
         <main className="p-4">
           <div className="grid grid-cols-[auto_1fr] grid-rows-2 mt-8 mb-9 gap-x-4 gap-y-0">
             <UserAvatar className="row-span-2" />
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-medium">{user?.username}</h2>
-              {user.role === "admin" && (
-                <BadgeCheck size={24} strokeWidth={0.8} />
-              )}
+              <AdminBadge />
             </div>
-            <div className="row-span-1">{user.email}</div>
+            <div className="row-span-1">{user?.email}</div>
           </div>
 
           <section className="mb-6">
