@@ -14,14 +14,28 @@ interface Message {
     title: string;
     description: string;
   };
+  submit: {
+    title: string;
+    description: string;
+  };
+  alreadyInTeam: {
+    title: string;
+    description: string;
+  };
+}
+
+interface Options {
+  type?: "destructive";
+  data?: string;
+  duration?: number;
 }
 
 export const useTriggerToast = () => {
   const triggerToast = (
-    variant: "logout" | "login" | "signup",
-    name?: string,
-    duration: number = 2300
+    variant: "logout" | "login" | "signup" | "submit" | "alreadyInTeam",
+    options?: Options
   ) => {
+    const { type, data, duration = 3000 } = options || {};
     const messages: Message = {
       logout: {
         title: "Logged out successfully",
@@ -29,15 +43,24 @@ export const useTriggerToast = () => {
       },
       login: {
         title: "Signed in successfully",
-        description: `Welcome back, ${name}!`,
+        description: `Welcome back, ${data}!`,
       },
       signup: {
         title: "Signed up successfully",
-        description: `Welcome, ${name}!`,
+        description: `Welcome, ${data}!`,
+      },
+      submit: {
+        title: "Submitted successfully",
+        description: "Your data has been saved!",
+      },
+      alreadyInTeam: {
+        title: "Already in Team",
+        description: `You're already a member of this team, ${data}.`,
       },
     };
     setTimeout(() => {
       toast({
+        variant: type === "destructive" ? "destructive" : undefined,
         title: messages[variant].title,
         description: messages[variant].description,
         duration,
