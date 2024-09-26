@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
-  console.log("verifying token");
   try {
     let token = req.header("Authorization");
 
-    console.log("TOKEN", token);
+    console.log("check", token);
 
     if (!token) {
       return res.status(401).send("Unauthorized User");
@@ -13,11 +12,14 @@ const verifyToken = async (req, res, next) => {
 
     if (token.startsWith("Bearer")) {
       token = token.split(" ")[1];
+      console.log("verifying token", token);
     }
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
     req.me = decoded;
+
+    console.log("adding decoded jwt to req.me", decoded);
 
     next();
   } catch (error) {
