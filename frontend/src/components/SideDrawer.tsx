@@ -17,6 +17,7 @@ import { NavbarLink } from "./NavbarLink";
 import { ChevronDown } from "lucide-react";
 import { NavbarAboutUs } from "./NavbarAboutUs";
 import React from "react";
+import { DialogLogoutButton } from "./DialogLogoutButton";
 
 export function SideDrawer({
   trigger,
@@ -157,6 +158,7 @@ export function SideDrawer({
               </div>
             </div>
           )}
+
           <SheetClose className="text-start">
             <div
               onClick={() => {

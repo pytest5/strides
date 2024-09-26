@@ -79,7 +79,7 @@ export const useTriggerToast = () => {
         description: messages[variant].description,
         duration,
       });
-    }, 1000);
+    }, 800);
   };
 
   return triggerToast;

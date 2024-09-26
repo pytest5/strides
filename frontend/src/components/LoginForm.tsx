@@ -20,6 +20,8 @@ import { useUser } from "./UserProvider.tsx";
 import { useTriggerToast } from "@/hooks/use-trigger-toast.ts";
 import fetchCountries from "@/utils/fetchCountries.ts";
 import { useMutation } from "@tanstack/react-query";
+import LoadingSpinner from "./LoadingSpinner.tsx";
+import { Loader2 } from "lucide-react";
 
 async function action({
   params,
@@ -97,6 +99,10 @@ export default function LoginForm() {
     mutation.mutate(values);
   }
 
+  if (mutation.isPending) {
+    <LoadingSpinner />;
+  }
+
   return (
     <Form {...form}>
       <form
@@ -131,7 +137,14 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        {form.formState.isSubmitting ? (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        ) : (
+          <Button type="submit">Submit</Button>
+        )}
         {errors.root && (
           <div className="text-destructive font-medium text-[0.8rem]">
             {errors.root.message}

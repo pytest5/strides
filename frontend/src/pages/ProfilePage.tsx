@@ -123,10 +123,7 @@ export default function ProfilePage() {
                   onChange={(e) => setBio(e.target.value)}
                   className="mt-1"
                 />
-                <p className="text-sm text-muted-foreground mt-1">
-                  You can @mention other users and organizations to link to
-                  them.
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">Your bio.</p>
               </div>
             </div>
             <Button>Update profile</Button>

@@ -9,7 +9,7 @@ export const AdminBadge = () => {
     <>
       {isAdmin && (
         <Badge variant="secondary" className="bg-green-100 text-green-800">
-          <ShieldCheck className="w-3 h-3 mr-1" />
+          <ShieldCheck className="w-3 h-3" />
           <span className="hidden md:inline">Admin</span>
         </Badge>
       )}

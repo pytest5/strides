@@ -3,6 +3,7 @@ import { NavbarLink } from "./NavbarLink";
 import { ChevronDown } from "lucide-react";
 import { NavbarAboutUs } from "./NavbarAboutUs";
 import { useUser } from "./UserProvider";
+import { DropDownStrideMenu } from "./DropDownStrideMenu";
 
 export const HorizontalNavbarLinks = ({
   variant,
@@ -55,36 +56,37 @@ export const HorizontalNavbarLinks = ({
           Admin
         </NavbarLink>
       )}
-      {isLoggedIn && (
-        <div className={`${isHorizontal ? "relative" : ""}`}>
-          <button
-            onClick={() => setIsAboutOpen(!isAboutOpen)}
-            className={`${isHorizontal ? horizontalStyles : verticalStyles}`}
-          >
-            Strides
-            <ChevronDown
-              className={`${
-                !isHorizontal
-                  ? `h-5 w-5 transform ${
-                      isAboutOpen ? "rotate-180" : ""
-                    } transition-transform duration-200`
-                  : "ml-1 h-4 w-4"
-              }`}
-            />
-          </button>
-          {isAboutOpen && (
-            <div
-              className={`${
-                isHorizontal
-                  ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                  : ""
-              }`}
-            >
-              <NavbarAboutUs className="py-1" />
-            </div>
-          )}
-        </div>
-      )}
+      {
+        isLoggedIn && <DropDownStrideMenu />
+        // <div className={`${isHorizontal ? "relative" : ""}`}>
+        //   <button
+        //     onClick={() => setIsAboutOpen(!isAboutOpen)}
+        //     className={`${isHorizontal ? horizontalStyles : verticalStyles}`}
+        //   >
+        //     Strides
+        //     <ChevronDown
+        //       className={`${
+        //         !isHorizontal
+        //           ? `h-5 w-5 transform ${
+        //               isAboutOpen ? "rotate-180" : ""
+        //             } transition-transform duration-200`
+        //           : "ml-1 h-4 w-4"
+        //       }`}
+        //     />
+        //   </button>
+        //   {isAboutOpen && (
+        //     <div
+        //       className={`${
+        //         isHorizontal
+        //           ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+        //           : ""
+        //       }`}
+        //     >
+        //       <NavbarAboutUs className="py-1" />
+        //     </div>
+        //   )}
+        // </div>
+      }
     </>
   );
 };

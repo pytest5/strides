@@ -15,11 +15,13 @@ import AddStridesPage from "./pages/AddStridesPage.tsx";
 import TeamsPage from "./pages/TeamsPage.tsx";
 import AddTeamPage from "./pages/AddTeamPage.tsx";
 import { MyStridesPage } from "./pages/MyStridesPage.tsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <UserProvider />,
+    errorElement: <ErrorPage />,
     children: [
       {
         element: <Layout />,
@@ -50,12 +52,8 @@ const router = createBrowserRouter([
             ],
           },
           {
-            loader: protectedAdminLoader, // TODO: CHANGE TO PROTECTED ADMIN LOADER
-            children: [
-              // { path: "admin", element: <AdminPage /> },
-              { path: "admin", element: <AdminPage /> },
-              // { path: "admin/profile", element: <ProfilePage /> },
-            ],
+            loader: protectedAdminLoader,
+            children: [{ path: "admin", element: <AdminPage /> }],
           },
         ],
       },

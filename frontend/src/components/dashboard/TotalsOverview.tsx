@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useFetch } from "@/hooks/use-fetch";
 import data from "../../data/mockData.json";
-
+console.log(data);
 import {
   Card,
   CardContent,
@@ -45,7 +45,7 @@ const statItems: StatItem[] = [
     icon: <Globe className="w-5 h-5 text-red-500" />,
     label: "Countries",
     value: "46",
-    color: "bg-indigo-100",
+    color: colors[0],
   },
   {
     icon: <Users className="w-5 h-5 text-orange-500" />,
@@ -92,16 +92,24 @@ export const TotalsOverview = () => {
   // );
   // if (isFetching) return <h1>"Loading for the first time"</h1>;
   // if (isPending) return <h1>"Refetching data in the background"</h1>;
+  // const statsData = [
+  //   data[0].total_strides_countries,
+  //   data[0].total_strides_users,
+  //   data[0].total_strides,
+  //   data[0].total_items_picked,
+  //   data[0].total_weight,
+  //   data[0].total_distance,
+  //   data[0].total_time_in_minutes,
+  // ];
   const statsData = [
-    data[0].total_strides_countries,
-    data[0].total_strides_users,
-    data[0].total_strides,
-    data[0].total_items_picked,
-    data[0].total_weight,
-    data[0].total_distance,
-    data[0].total_time_in_minutes,
+    46,
+    "10,809",
+    "6,500",
+    "829,000",
+    "20,136kg",
+    "47,400km",
+    "4194d 49mins",
   ];
-
   const statsDataItems = statItems.map((i, idx) => ({
     ...i,
     value: statsData[idx],

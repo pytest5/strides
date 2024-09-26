@@ -23,6 +23,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import offlineCountries from "../data/countries.json";
+
 const languages = [
   { label: "English", value: "en" },
   { label: "French", value: "fr" },
@@ -43,6 +45,14 @@ export const CountrySelector = ({ field, form }) => {
   const { data: countries, error, isPending } = useCountries(jwtToken);
 
   const arrayOfCountriesObj = countries?.map(
+    ({ id, name }: { id: number; name: string }) => ({
+      id: id,
+      label: name,
+      value: id,
+    })
+  );
+
+  const arrayOfOfflineCountriesObj = offlineCountries?.map(
     ({ id, name }: { id: number; name: string }) => ({
       id: id,
       label: name,
@@ -72,7 +82,7 @@ export const CountrySelector = ({ field, form }) => {
               )}
             >
               {field.value
-                ? arrayOfCountriesObj.find(
+                ? arrayOfOfflineCountriesObj.find(
                     (country) => country.value === field.value
                   )?.label
                 : "Select country"}

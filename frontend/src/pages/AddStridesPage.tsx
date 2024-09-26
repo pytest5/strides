@@ -164,22 +164,22 @@ export default function AddStridesPage() {
         <div className="flex md:flex-col md:gap-4 md:items-center items-stretch text-center md:bg-gray-100 rounded-md py-3 pr-4 md:border-none md:pr-0">
           <div className="border-r-2 border-slate-200 flex-1 md:border-r-0">
             <Label className="font-normal text-gray-500">Points</Label>
-            <p className="text-md md:text-2xl font-bold ">{totalItems}</p>
+            <p className="text-md md:text-xl font-bold ">{totalItems}</p>
           </div>
           <Separator className="hidden md:block" />
           <div className="border-r-2 border-slate-200 flex-1 md:border-r-0">
             <Label className="font-normal text-gray-500">Items</Label>
-            <p className="text-md md:text-2xl font-bold">{totalItems}</p>
+            <p className="text-md md:text-xl font-bold">{totalItems}</p>
           </div>
           <Separator className="hidden md:block" />
           <div className="border-r-2 border-slate-200 flex-1 md:border-r-0">
             <Label className="font-normal text-gray-500">Time</Label>
-            <p className="text-md md:text-2xl font-bold">15m</p>
+            <p className="text-md md:text-xl font-bold">15m</p>
           </div>
           <Separator className="hidden md:block" />
           <div className="flex-1">
             <Label className="font-normal text-gray-500">Distance</Label>
-            <p className="text-md md:text-2xl font-bold">0.1 km</p>
+            <p className="text-md md:text-xl font-bold">0.1 km</p>
           </div>
         </div>
       </aside>
