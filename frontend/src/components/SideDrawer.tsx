@@ -95,47 +95,52 @@ export function SideDrawer({
               </SheetClose>
             )}
 
-            <div className={`${isHorizontal ? "relative" : ""}`}>
-              <button
-                onClick={() => setIsAboutOpen(!isAboutOpen)}
-                className={`${
-                  isHorizontal ? horizontalStyles : verticalStyles
-                }`}
-              >
-                Strides
-                <ChevronDown
+            {isLoggedIn && (
+              <div className={`${isHorizontal ? "relative" : ""}`}>
+                <button
+                  onClick={() => setIsAboutOpen(!isAboutOpen)}
                   className={`${
-                    !isHorizontal
-                      ? `h-5 w-5 transform ${
-                          isAboutOpen ? "rotate-180" : ""
-                        } transition-transform duration-200`
-                      : "ml-1 h-4 w-4"
-                  }`}
-                />
-              </button>
-              {isAboutOpen && (
-                <div
-                  className={`${
-                    isHorizontal
-                      ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                      : ""
+                    isHorizontal ? horizontalStyles : verticalStyles
                   }`}
                 >
-                  <div className="pl-4 py-1">
-                    <SheetClose asChild>
-                      <NavbarLink to="/strides/add" className="block text-base">
-                        Add stride
-                      </NavbarLink>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <NavbarLink to="/strides" className="block text-base">
-                        My strides
-                      </NavbarLink>
-                    </SheetClose>
+                  Strides
+                  <ChevronDown
+                    className={`${
+                      !isHorizontal
+                        ? `h-5 w-5 transform ${
+                            isAboutOpen ? "rotate-180" : ""
+                          } transition-transform duration-200`
+                        : "ml-1 h-4 w-4"
+                    }`}
+                  />
+                </button>
+                {isAboutOpen && (
+                  <div
+                    className={`${
+                      isHorizontal
+                        ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                        : ""
+                    }`}
+                  >
+                    <div className="pl-4 py-1">
+                      <SheetClose asChild>
+                        <NavbarLink
+                          to="/strides/add"
+                          className="block text-base"
+                        >
+                          Add stride
+                        </NavbarLink>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <NavbarLink to="/strides" className="block text-base">
+                          My strides
+                        </NavbarLink>
+                      </SheetClose>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </>
         </div>
         <SheetFooter className="mt-auto border-t border-gray-200 sm:flex-col-reverse ">

@@ -64,7 +64,12 @@ export default function TeamsPage() {
               className="text-xs h-5 w-14 !mt-0"
               asChild
             >
-              <Link to="add">Add</Link>
+              <Link
+                to="add"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                Add
+              </Link>
             </Button>
           </CardHeader>
           <CardContent className="h-[400px] overflow-auto">
