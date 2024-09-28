@@ -96,7 +96,7 @@ export const CountrySelector = ({ field, form }) => {
             <CommandList>
               <CommandEmpty>No country found.</CommandEmpty>
               <CommandGroup>
-                {arrayOfCountriesObj.map((country) => (
+                {arrayOfOfflineCountriesObj.map((country) => (
                   <CommandItem
                     value={country.label}
                     key={country.value}

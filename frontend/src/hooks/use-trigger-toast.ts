@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from "./use-toast";
+import { capitalizeFirstLetter } from "@/utils";
 
 interface Message {
   logout: {
@@ -18,6 +19,7 @@ interface Message {
     title: string;
     description: string;
   };
+  c;
   alreadyInTeam: {
     title: string;
     description: string;
@@ -33,6 +35,8 @@ interface Options {
   data?: string;
   duration?: number;
 }
+
+capitalizeFirstLetter;
 
 export const useTriggerToast = () => {
   const triggerToast = (
@@ -53,11 +57,11 @@ export const useTriggerToast = () => {
       },
       login: {
         title: "Signed in successfully",
-        description: `Welcome back, ${data}!`,
+        description: `Welcome back, ${capitalizeFirstLetter(data)}!`,
       },
       signup: {
         title: "Signed up successfully",
-        description: `Welcome, ${data}!`,
+        description: `Welcome, ${capitalizeFirstLetter(data)}!`,
       },
       submit: {
         title: "Submitted successfully",
