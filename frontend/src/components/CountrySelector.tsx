@@ -63,7 +63,7 @@ export const CountrySelector = ({ field, form }) => {
   // const arrayOfCountriesObj = [];
   console.log(countries);
 
-  if (isPending || !arrayOfCountriesObj) {
+  if (isPending || !arrayOfOfflineCountriesObj) {
     return <LoadingSpinner />;
   }
 

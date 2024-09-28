@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("../frontend/dist")); // TODO study
 
-const db = require("./db");
-const devRouter = require("./routes/dev.js");
+// const db = require("./db");
+
 const usersRouter = require("./routes/users.js");
 const teamsRouter = require("./routes/teams.js");
 const stridesRouter = require("./routes/strides.js");
@@ -27,6 +27,7 @@ app.use("/api/items", itemsRouter);
 app.use("/api/countries", countriesRouter);
 app.use("/api/strides", stridesRouter);
 
+// const devRouter = require("./routes/dev.js");
 // app.use("/dev", devRouter);
 // app.use("/teams", teamsRouter);
 

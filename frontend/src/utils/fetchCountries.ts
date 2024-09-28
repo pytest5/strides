@@ -1,4 +1,4 @@
-// import stridesData from "../data/strides-global-clean.json";
+import countries from "../data/countries.json";
 
 const fetchCountries = () => {
   // fetch country data from db
