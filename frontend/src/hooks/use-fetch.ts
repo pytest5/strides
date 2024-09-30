@@ -5,13 +5,21 @@ interface Options {
     Authorization: string;
   };
 }
+
+interface QueryOptions {
+  token?: string | undefined;
+  enabled?: boolean;
+}
+
 const getData = async <T>(
-  url: string,
+  url: string | undefined,
   token?: string | undefined
 ): Promise<T> => {
   const options: Options = {
     headers: { Authorization: `Bearer ${token}` },
   };
+
+  if (!url) throw new Error("URL is undefined, cannot fetch data");
 
   const res = await fetch(url, options);
   if (!res.ok) {
@@ -21,13 +29,14 @@ const getData = async <T>(
 };
 
 export function useFetch<T>(
-  url: string,
+  url: string | undefined,
   identifier: string[],
-  token?: string | undefined
+  { token = "", enabled = true }: QueryOptions = {}
 ) {
   const { isPending, error, data, isFetching } = useQuery<T>({
     queryKey: identifier,
     queryFn: () => getData<T>(url, token),
+    enabled,
   });
   return { isPending, error, data, isFetching };
 }

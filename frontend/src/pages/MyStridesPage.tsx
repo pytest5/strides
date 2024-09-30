@@ -29,7 +29,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -46,6 +45,7 @@ import * as z from "zod";
 import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import convertDateTime from "@/utils/convertDateTime";
 
 interface Stride {
   strides_id: number;
@@ -56,6 +56,14 @@ interface Stride {
   team: string;
   created_at: string;
 }
+interface UserStrideData {
+  created_at: string; // "2024-09-28T00:27:20.058Z"
+  distance: number; // 10
+  duration: number; // 3
+  id: number; // 220
+  team_name: string; // "ele1"
+}
+
 export type EditStrideFormType = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
@@ -100,8 +108,6 @@ function EditStrideDialog({
     },
   });
 
-  console.log("errors", form.formState.errors);
-
   const watchTeam = form.watch("team");
 
   const { mutate: updateMutation } = useMutation({
@@ -125,7 +131,6 @@ function EditStrideDialog({
     });
     updateMutation({ strideData: { ...stride, ...values }, jwtToken });
   }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -145,45 +150,6 @@ function EditStrideDialog({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 md:space-y-8"
           >
-            {/* <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Username" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is the user's display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.username?.message}
-              </div>
-            )} */}
-            {/* <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Country" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.country?.message}
-              </div>
-            )} */}
             <FormField
               control={form.control}
               name="distance"
@@ -252,19 +218,6 @@ function EditStrideDialog({
                 {form.formState.errors?.team?.message}
               </div>
             )}
-            {/* <FormField
-              control={form.control}
-              name="team"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Team" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <DialogFooter>
               <Button type="submit">Save changes</Button>
             </DialogFooter>
@@ -277,14 +230,17 @@ function EditStrideDialog({
 
 export function MyStridesPage() {
   const { jwtToken, user } = useUser();
-  const { data } = useFetch(
+  const { data, isPending } = useFetch<UserStrideData[]>(
     `/api/strides/${user?.id}`,
     ["fetchMyStrides"],
-    jwtToken
+    {
+      token: jwtToken,
+      enabled: !!user,
+    }
   );
+
   const queryClient = useQueryClient();
-  console.log(data);
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: removeStride,
     onSuccess: () => {
       queryClient.invalidateQueries(
@@ -328,13 +284,10 @@ export function MyStridesPage() {
                     Stride
                   </th>
                   {[
-                    // "Name",
-                    // "Country",
                     "Distance (m)",
                     "Duration (mins)",
                     "Team",
                     "Created At",
-                    // "Actions",
                   ].map((header) => (
                     <th
                       key={header}
@@ -347,7 +300,7 @@ export function MyStridesPage() {
               </thead>
               <tbody>
                 {data?.map((stride) => (
-                  <tr key={stride.strides_id} className="border-t">
+                  <tr key={stride.id} className="border-t">
                     <td className="sticky left-0 z-10 bg-background px-4 py-3 font-medium">
                       {stride.id}
                     </td>
@@ -367,7 +320,7 @@ export function MyStridesPage() {
                       {stride.team_name}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.created_at}
+                      {convertDateTime(stride.created_at)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <DropdownMenu>

@@ -18,19 +18,16 @@ type Team = {
 
 export default function TeamsPage() {
   const { jwtToken, user } = useUser();
-  console.log(jwtToken);
   const { isPending, data: publicTeams } = useFetch<Team[]>(
     "/api/teams/public",
     ["fetchPublicTeams"],
-    jwtToken
+    { token: jwtToken }
   );
   const { isPending: isMyTeamsPending, data: myTeams } = useFetch<Team[]>(
     "/api/teams/my",
     ["fetchMyTeams", user?.email],
-    jwtToken
+    { token: jwtToken }
   );
-  console.log("pub team", publicTeams);
-  console.log("my team", myTeams);
   const { data: countries, isPending: isCountryPending } =
     useCountries(jwtToken);
 
