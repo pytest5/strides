@@ -40,7 +40,10 @@ import { useCountries } from "@/hooks/use-countries";
 import { useUser } from "./UserProvider";
 import LoadingSpinner from "./LoadingSpinner";
 
-export const CountrySelector = ({ field, form }) => {
+interface Props {
+  field: string;
+}
+export const CountrySelector = ({ field, form }: Props) => {
   const { jwtToken } = useUser();
   const { data: countries, error, isPending } = useCountries(jwtToken);
 
