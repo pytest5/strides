@@ -1,4 +1,3 @@
-import React from "react";
 import { toast } from "./use-toast";
 import { capitalizeFirstLetter } from "@/utils";
 
@@ -19,12 +18,15 @@ interface Message {
     title: string;
     description: string;
   };
-  c;
   alreadyInTeam: {
     title: string;
     description: string;
   };
   leaveTeam: {
+    title: string;
+    description: string;
+  };
+  positionError: {
     title: string;
     description: string;
   };
@@ -36,19 +38,8 @@ interface Options {
   duration?: number;
 }
 
-capitalizeFirstLetter;
-
 export const useTriggerToast = () => {
-  const triggerToast = (
-    variant:
-      | "logout"
-      | "login"
-      | "signup"
-      | "submit"
-      | "alreadyInTeam"
-      | "leaveTeam",
-    options?: Options
-  ) => {
+  const triggerToast = (variant: keyof Message, options?: Options) => {
     const { type, data, duration = 3000 } = options || {};
     const messages: Message = {
       logout: {
@@ -74,6 +65,10 @@ export const useTriggerToast = () => {
       leaveTeam: {
         title: "Left Team Successfully",
         description: `You have successfully left the team.`,
+      },
+      positionError: {
+        title: "Location unvailable",
+        description: `Unable to obtain location.`,
       },
     };
     setTimeout(() => {
