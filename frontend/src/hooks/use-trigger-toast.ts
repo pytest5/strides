@@ -1,37 +1,23 @@
 import { toast } from "./use-toast";
 import { capitalizeFirstLetter } from "@/utils";
 
-// type Messages = Record<string, { title: string; description: string }>;
+interface Message {
+  title: string;
+  description: string;
+}
 
 interface Messages {
-  logout: {
-    title: string;
-    description: string;
-  };
-  login: {
-    title: string;
-    description: string;
-  };
-  signup: {
-    title: string;
-    description: string;
-  };
-  submit: {
-    title: string;
-    description: string;
-  };
-  alreadyInTeam: {
-    title: string;
-    description: string;
-  };
-  leaveTeam: {
-    title: string;
-    description: string;
-  };
-  positionError: {
-    title: string;
-    description: string;
-  };
+  logout: Message;
+  login: Message;
+  signup: Message;
+  submit: Message;
+  alreadyInTeam: Message;
+  leaveTeam: Message;
+  locationError: Message;
+  locationNotSupported: Message;
+  locationDenied: Message;
+  locationObtained: Message;
+  gettingLocation: Message;
 }
 
 interface Options {
@@ -68,9 +54,25 @@ export const useTriggerToast = () => {
         title: "Left Team Successfully",
         description: `You have successfully left the team.`,
       },
-      positionError: {
-        title: "Location unvailable",
+      locationError: {
+        title: "Location error",
         description: `Unable to obtain location.`,
+      },
+      locationObtained: {
+        title: "Location obtained",
+        description: `Current location: ${data}`,
+      },
+      locationNotSupported: {
+        title: "Location not supported",
+        description: `Geolocation services not supported on this browser.`,
+      },
+      locationDenied: {
+        title: "Location permissions not granted",
+        description: `Geolocation services permissions not granted by user.`,
+      },
+      gettingLocation: {
+        title: "Getting location",
+        description: `Looking for your current location... `,
       },
     };
     setTimeout(() => {
