@@ -314,7 +314,6 @@ export function AdminPage() {
         <CardTitle>Strides</CardTitle>
         <CardDescription>
           View and manage strides across different locations.{" "}
-          {convertDateTime(new Date())}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0 px-3 md:px-6">
@@ -324,7 +323,7 @@ export function AdminPage() {
               <thead>
                 <tr>
                   <th className="sticky left-0 z-20 bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground">
-                    Strides ID
+                    Stride
                   </th>
                   {[
                     "Name",

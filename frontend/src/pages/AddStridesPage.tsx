@@ -83,8 +83,9 @@ export default function AddStridesPage() {
       return submitStride(newData, jwtToken, location);
     },
     onSuccess: () => {
-      triggerToast("submit");
       queryClient.invalidateQueries({ queryKey: ["fetchMyStrides"] });
+      queryClient.invalidateQueries({ queryKey: ["fetchAdminData"] });
+      triggerToast("submit");
     },
     onError: (error) => {
       "submitted";
@@ -100,6 +101,7 @@ export default function AddStridesPage() {
   const {
     watch,
     setValue,
+    setError,
     formState: { errors },
     reset,
   } = form;
@@ -116,6 +118,10 @@ export default function AddStridesPage() {
     }
     if (!location) {
       triggerToast("formLocationError", { type: "destructive" });
+      setError("root.location", {
+        type: "custom",
+        message: "Unable to get location for stride submission",
+      });
     } else {
       const res = mutation.mutate({ newData, jwtToken, location });
       console.log("Form submitted successfully");
