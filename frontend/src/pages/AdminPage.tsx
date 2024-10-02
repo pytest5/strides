@@ -46,6 +46,7 @@ import * as z from "zod";
 import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import convertDateTime from "@/utils/convertDateTime";
 
 interface Stride {
   strides_id: number;
@@ -312,7 +313,8 @@ export function AdminPage() {
         {/* <h1 className="text-2xl border-b-2 pb-3 mb-5">Admin</h1> */}
         <CardTitle>Strides</CardTitle>
         <CardDescription>
-          View and manage strides across different locations.
+          View and manage strides across different locations.{" "}
+          {convertDateTime(new Date())}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0 px-3 md:px-6">
@@ -364,7 +366,7 @@ export function AdminPage() {
                       {stride.team}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.created_at}
+                      {convertDateTime(stride.created_at, stride.strides_id)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <DropdownMenu>

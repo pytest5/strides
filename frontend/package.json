@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "dayjs": "^1.11.13",
     "lucide-react": "^0.439.0",
     "mapbox-gl": "^3.6.0",
     "path": "^0.12.7",
