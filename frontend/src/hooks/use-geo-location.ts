@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTriggerToast } from "./use-trigger-toast";
-
-interface Location {
-  latitude: number;
-  longitude: number;
-}
+import { Location } from "@/services/stridesService";
 
 export function useGeoLocation() {
   const [location, setLocation] = useState<Location | null>();

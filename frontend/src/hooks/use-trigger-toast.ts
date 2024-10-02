@@ -18,6 +18,7 @@ interface Messages {
   locationDenied: Message;
   locationObtained: Message;
   gettingLocation: Message;
+  formLocationError: Message;
 }
 
 interface Options {
@@ -53,6 +54,10 @@ export const useTriggerToast = () => {
       leaveTeam: {
         title: "Left Team Successfully",
         description: `You have successfully left the team.`,
+      },
+      formLocationError: {
+        title: "Form location error",
+        description: `Unable to get location for form submission.`,
       },
       locationError: {
         title: "Location error",
