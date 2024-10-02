@@ -86,10 +86,16 @@ async function addStride(req, res, next) {
     ];
     const result = await db.query(insertStrideText, strideValues);
     const strideId = result.rows[0].id;
+    const itemNameMap = {
+      glass: "glass bottle",
+      plastic: "plastic bottle",
+      metal: "metal can",
+    };
     // Loop through items in req.body.data
-    for (const [itemName, quantity] of Object.entries(data)) {
+    for (let [itemName, quantity] of Object.entries(data)) {
       if (quantity === 0) continue;
       else {
+        itemName = itemNameMap[itemName] || itemName;
         console.log("inserting ", itemName, quantity);
         const insertItemText = `
           INSERT INTO strides_items (item_id, stride_id, quantity, created_at)

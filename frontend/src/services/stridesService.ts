@@ -4,9 +4,9 @@ import { EditStrideFormType } from "@/pages/AdminPage";
 type TokenType = string;
 
 export type Location = {
-  latitude: string;
-  longitude: string;
-} | null;
+  latitude: number;
+  longitude: number;
+};
 
 export const submitStride = async (
   data: AddStrideFormDataType,

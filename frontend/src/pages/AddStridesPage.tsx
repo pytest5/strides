@@ -1,11 +1,10 @@
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,7 +46,7 @@ const formSchema = z
   });
 
 interface MutationArgs {
-  data: AddStrideFormDataType;
+  newData: AddStrideFormDataType;
   jwtToken: string;
   location: Location;
 }
@@ -69,7 +68,7 @@ const defaultValues = {
     (a, c) => ({ ...a, [c.name.toLowerCase()]: 0 }),
     {}
   ),
-  teams: "",
+  team: "",
 };
 
 export default function AddStridesPage() {
@@ -79,26 +78,21 @@ export default function AddStridesPage() {
   const triggerToast = useTriggerToast();
   const queryClient = useQueryClient();
 
-  console.log(triggerToast);
-
   const mutation = useMutation({
     mutationFn: ({ newData, jwtToken, location }: MutationArgs) => {
       return submitStride(newData, jwtToken, location);
     },
-    onSuccess: (data, variable, context) => {
+    onSuccess: () => {
       triggerToast("submit");
       queryClient.invalidateQueries({ queryKey: ["fetchMyStrides"] });
     },
-    // onSuccess: (data, variable, context) => {
-    //   triggerToast("submit");
-    // },
     onError: (error) => {
       "submitted";
       console.error("Error submitting form:", error);
     },
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<AddStrideFormDataType>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
@@ -111,30 +105,29 @@ export default function AddStridesPage() {
   } = form;
 
   const onSubmit = (data: AddStrideFormDataType) => {
-    const { glass, plastic, metal, ...rest } = data;
     const newData = {
-      ...rest,
+      ...data,
       team: watchTeam,
-      "glass bottle": data["glass"],
-      "plastic bottle": data["plastic"],
-      "metal can": data["metal"],
     };
     console.log("submitting", newData);
     if (Object.values(data).every((value) => value === 0)) {
       console.log("Form is empty, preventing submission");
       return;
     }
-    const res = mutation.mutate({ newData, jwtToken, location });
-    console.log("Form submitted successfully");
-    reset(defaultValues);
-    return res;
+    if (!location) {
+      triggerToast("formLocationError", { type: "destructive" });
+    } else {
+      const res = mutation.mutate({ newData, jwtToken, location });
+      console.log("Form submitted successfully");
+      reset(defaultValues);
+      return res;
+    }
   };
 
   const watchTeam = watch("team"); // Watch team selection
-
   const watchAllFields = watch();
 
-  console.log("ERRORS", errors);
+  console.log(watchAllFields);
 
   const totalItems = Object.values(watchAllFields)
     .filter((value) => typeof value === "number")
@@ -145,7 +138,7 @@ export default function AddStridesPage() {
       typeof formSchema
     >;
     const currentValue = watchAllFields[lowerCaseCategory] || 0;
-    setValue(lowerCaseCategory, currentValue + 1);
+    setValue(lowerCaseCategory, Number(currentValue) + 1);
     setSelectedCategory(lowerCaseCategory);
   };
 
@@ -226,14 +219,15 @@ export default function AddStridesPage() {
                                 className="w-8 h-8 mb-2"
                               />
                               <span className="text-sm ">{category.name}</span>
-                              {field.value > 0 && (
-                                <Badge
-                                  className="absolute top-1 right-1 bg-slate-700"
-                                  variant="default"
-                                >
-                                  {field.value}
-                                </Badge>
-                              )}
+                              {typeof field.value === "number" &&
+                                field.value > 0 && (
+                                  <Badge
+                                    className="absolute top-1 right-1 bg-slate-700"
+                                    variant="default"
+                                  >
+                                    {field.value}
+                                  </Badge>
+                                )}
                             </Button>
                           </FormControl>
                         </FormItem>
@@ -262,11 +256,7 @@ export default function AddStridesPage() {
                           selectedCategory as keyof z.infer<typeof formSchema>,
                           Math.max(
                             0,
-                            (watchAllFields[
-                              selectedCategory as keyof z.infer<
-                                typeof formSchema
-                              >
-                            ] || 0) - 1
+                            (watchAllFields[selectedCategory] || 0) - 1
                           )
                         )
                       }
