@@ -1,7 +1,9 @@
 import { toast } from "./use-toast";
 import { capitalizeFirstLetter } from "@/utils";
 
-interface Message {
+// type Messages = Record<string, { title: string; description: string }>;
+
+interface Messages {
   logout: {
     title: string;
     description: string;
@@ -39,9 +41,9 @@ interface Options {
 }
 
 export const useTriggerToast = () => {
-  const triggerToast = (variant: keyof Message, options?: Options) => {
+  const triggerToast = (variant: keyof Messages, options?: Options) => {
     const { type, data, duration = 3000 } = options || {};
-    const messages: Message = {
+    const messages: Messages = {
       logout: {
         title: "Logged out successfully",
         description: "See you next time!",
