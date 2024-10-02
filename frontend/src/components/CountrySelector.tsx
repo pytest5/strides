@@ -22,39 +22,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import offlineCountries from "../data/countries.json";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
 import { useCountries } from "@/hooks/use-countries";
 import { useUser } from "./UserProvider";
 import LoadingSpinner from "./LoadingSpinner";
+import { FieldTypes } from "./SignupForm";
 
 interface Props {
-  field: string;
+  field: ControllerRenderProps<FieldTypes, "country">;
+  form: UseFormReturn<FieldTypes>;
 }
 export const CountrySelector = ({ field, form }: Props) => {
   const { jwtToken } = useUser();
-  const { data: countries, error, isPending } = useCountries(jwtToken);
-
-  const arrayOfCountriesObj = countries?.map(
-    ({ id, name }: { id: number; name: string }) => ({
-      id: id,
-      label: name,
-      value: id,
-    })
-  );
-
+  const { data: countries, isPending } = useCountries(jwtToken);
+  // const arrayOfCountriesObj = countries?.map(
+  //   ({ id, name }: { id: number; name: string }) => ({
+  //     id: id,
+  //     label: name,
+  //     value: id,
+  //   })
+  // );
   const arrayOfOfflineCountriesObj = offlineCountries?.map(
     ({ id, name }: { id: number; name: string }) => ({
       id: id,
@@ -62,14 +50,9 @@ export const CountrySelector = ({ field, form }: Props) => {
       value: id,
     })
   );
-
-  // const arrayOfCountriesObj = [];
-  console.log(countries);
-
-  if (!arrayOfOfflineCountriesObj) {
+  if (!arrayOfOfflineCountriesObj || isPending) {
     return <LoadingSpinner />;
   }
-
   return (
     <FormItem className="flex flex-col">
       <FormLabel>Country</FormLabel>

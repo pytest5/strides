@@ -1,9 +1,8 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-
 import {
   Form,
   FormControl,
@@ -19,13 +18,8 @@ import authService from "@/services/authService";
 import { CountrySelector } from "./CountrySelector";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { capitalizeFirstLetter } from "@/utils";
-async function action({
-  params,
-  request,
-}: {
-  params?: string;
-  request: Request;
-}) {
+
+async function action({ request }: { params?: string; request: Request }) {
   const formData = await request.formData();
   const { firstName } = Object.fromEntries(formData);
   await fakeAuthProvider.signin(firstName);
@@ -35,6 +29,8 @@ async function action({
 function checkIfUniqueEmail() {
   return true;
 } // TODO
+
+export type FieldTypes = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
   username: z
@@ -50,7 +46,8 @@ const formSchema = z.object({
     })
     .email("This is not a valid email.")
     .max(50),
-  /*   .refine(async (e) => {
+  /*  TODO
+   .refine(async (e) => {
       // Where checkIfEmailIsValid makes a request to the backend
       // to see if the email is valid.
       return await checkIfUniqueEmail();
@@ -67,7 +64,7 @@ const formSchema = z.object({
 export default function SignupForm() {
   const navigate = useNavigate();
   const triggerToast = useTriggerToast();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FieldTypes>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
@@ -151,48 +148,3 @@ export default function SignupForm() {
 }
 
 SignupForm.action = action;
-
-// type FormValues = {
-//   firstName: string;
-//   lastName?: string;
-//   email?: string;
-//   password: string;
-// };
-
-// export default function AdminLoginPage() {
-//   const submit = useSubmit();
-//   const {
-//     register,
-//     handleSubmit,
-//     watch,
-//     formState: { errors },
-//   } = useForm<FormValues>();
-
-//   const onSubmit: SubmitHandler<FormValues> = (data) =>
-//     submit(data, {
-//       method: "post",
-//       action: "/admin-login",
-//     });
-
-//   return (
-//     <>
-//       <h1>{watch("firstName") && `Hello ${watch("firstName")}`}</h1>
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <input
-//           className="border-solid border-2 border-gray-400 rounded-md"
-//           {...register("firstName", { required: "First name is required" })}
-//         ></input>
-//         {errors.firstName && (
-//           <p style={{ color: "red" }}>{errors.firstName.message}</p>
-//         )}
-//         <input
-//           {...register("password", { required: "Password is required" })}
-//         ></input>
-//         {errors.password && (
-//           <p style={{ color: "red" }}>{errors.password.message}</p>
-//         )}
-//         <input type="submit"></input>
-//       </form>
-//     </>
-//   );
-// }

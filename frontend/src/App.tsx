@@ -10,7 +10,6 @@ import { UserProvider } from "./components/UserProvider.tsx";
 import { protectedAdminLoader } from "./loaders/protectedAdminLoader.tsx";
 import { StridesMap } from "./components/StridesMap.tsx";
 import { Dashboard } from "./components/Dashboard.tsx";
-import { ItemsBarChart } from "./components/dashboard/ItemsBarChart.tsx";
 import AddStridesPage from "./pages/AddStridesPage.tsx";
 import TeamsPage from "./pages/TeamsPage.tsx";
 import AddTeamPage from "./pages/AddTeamPage.tsx";

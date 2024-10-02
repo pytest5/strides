@@ -167,7 +167,7 @@ export function Dashboard() {
             {/* Leader board */}
             <FrostedCardWrapper>
               <CardContent className="p-4">
-                <h3 className="font-bold mb-2">STRIDES Leaderboard</h3>
+                <h3 className="font-bold mb-2">Strides Leaderboard</h3>
                 <ol className="list-decimal list-inside">
                   <li>
                     Marcel Smits{" "}
