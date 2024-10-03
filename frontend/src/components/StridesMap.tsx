@@ -16,8 +16,9 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
   const [viewState, setViewState] = React.useState<Coord>({
     latitude: 1.3521,
     longitude: 103.8198,
-    zoom: 10.8,
+    zoom: 9.8,
   });
+  console.log("current zoom ", viewState.zoom);
   React.useEffect(() => {
     getUserLocation();
   }, []);
@@ -84,8 +85,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
       }
       ref.current.flyTo({
         center: feature.geometry.coordinates,
-        // center: event.features[0].geometry.coordinates,
-        zoom: viewState.zoom + 1,
+        zoom: viewState.zoom < 9 ? viewState.zoom + 4 : viewState.zoom + 1,
         duration: 2000,
       });
       // mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
@@ -119,13 +119,14 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
           //   setBbox(bounds);
           // }
         }}
-        onLoad={(e) => {
+        onIdle={(e) => {
           if (ref.current) {
             console.log("onload of map");
             const bounds = ref.current.getBounds().toArray().flat();
             console.log(bounds);
             setBbox(bounds);
           }
+          console.log("onload wrong");
         }}
         // onZoom={(e) => setViewState({ ...viewState, zoom: e.viewState.zoom })} // Update zoom
         style={{ width: "100%", height: "100vh" }}

@@ -85,7 +85,7 @@ export function Dashboard() {
       if (mapRef.current) {
         mapRef.current.flyTo({
           center: [longitude, latitude],
-          zoom: 4,
+          zoom: 5,
           duration: 12000,
           essential: true,
         });
@@ -95,6 +95,7 @@ export function Dashboard() {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+    // mapRef.current.resize();
   };
 
   if (isPending) {
