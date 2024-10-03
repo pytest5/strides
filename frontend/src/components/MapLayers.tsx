@@ -114,9 +114,9 @@ export const MapLayers = ({ zoom = 14, bbox }) => {
 
   console.log("map clusters: ", mapClusters);
 
-  if (isPending) {
-    return <LoadingSpinner />;
-  }
+  // if (isPending) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <Source

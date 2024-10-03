@@ -7,9 +7,7 @@ import {
   Globe,
   Users,
 } from "lucide-react";
-import { useFetch } from "@/hooks/use-fetch";
-import data from "../../data/mockData.json";
-console.log(data);
+
 import {
   Card,
   CardContent,

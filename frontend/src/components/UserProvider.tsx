@@ -106,8 +106,6 @@ export const UserProvider = () => {
     [user, logout, jwtToken, isLoggedIn, isAdmin]
   );
 
-  console.log(value);
-
   return (
     <UserContext.Provider value={value}>
       <Outlet />

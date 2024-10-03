@@ -180,7 +180,7 @@ export function SideDrawer({
           </SheetClose>
           <Link
             to={"/dashboard"}
-            className={` px-3 pt-2 py-2 mt-6 rounded-md font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out text-base`}
+            className={` px-3 pt-2 py-2 mt-6 ml-0 rounded-md font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out text-base`}
           >
             Shop now
           </Link>
