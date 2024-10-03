@@ -110,7 +110,7 @@ export const MapLayers = ({ zoom = 14, bbox }) => {
     queryFn: fetchClusters,
   });
 
-  console.log(mapClusters);
+  console.log("map clusters: ", mapClusters);
 
   if (isPending) {
     return <LoadingSpinner />;
