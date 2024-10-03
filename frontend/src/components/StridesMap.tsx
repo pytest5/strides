@@ -10,6 +10,7 @@ interface Coord {
   latitude: number;
   longitude: number;
   zoom: number;
+  test?: "";
 }
 
 const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
