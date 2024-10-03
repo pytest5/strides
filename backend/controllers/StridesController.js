@@ -189,6 +189,8 @@ async function getClusters(req, res) {
       maxZoom: 14, // Match Mapbox GL maxZoom
     }).load(geoJson.features); //  Load GeoJSON features into Supercluster
     const clusters = index.getClusters(bbox, zoom); // Get clusters for the given bounding box and zoom level
+
+    console.log("sending back geoJson clusters to frontend: ", clusters);
     res.json({
       // res.json needs to be in this shape as its going into a mapbox <Source
       type: "FeatureCollection",
