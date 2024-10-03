@@ -94,13 +94,15 @@ export const MapLayers = ({ zoom = 14, bbox }) => {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
-      console.log(json);
+      console.log("fetched clusters data", json);
       return json;
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
+        throw error;
       } else {
         console.log(error);
+        throw error;
       }
     }
   };
