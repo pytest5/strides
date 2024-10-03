@@ -29,9 +29,9 @@ export function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data, isPending } = useFetch("/api/strides/location", [
-    "fetchStrideLocations",
-  ]);
+  // const { data, isPending } = useFetch("/api/strides/location", [
+  //   "fetchStrideLocations",
+  // ]);
 
   const StridesMap = lazy(() => import("./StridesMap"));
 
@@ -61,7 +61,7 @@ export function Dashboard() {
   //   queryFn: fetchClusters,
   // });
 
-  const countryCoords = fetchCountryCoords(data);
+  // const countryCoords = fetchCountryCoords(data);
 
   const mapRef = React.useRef<MapRef | null>(null);
 
@@ -70,9 +70,9 @@ export function Dashboard() {
     longitude: number;
   }
 
-  type CountryCoord = { name: string; coordinates: CountryPosition };
+  // type CountryCoord = { name: string; coordinates: CountryPosition };
 
-  const countryCoordsTyped: CountryCoord[] = countryCoords;
+  // const countryCoordsTyped: CountryCoord[] = countryCoords;
 
   const handleSelectCountry = (countryName: string) => {
     setSelectedCountry(countryName);
@@ -98,9 +98,9 @@ export function Dashboard() {
     // mapRef.current.resize();
   };
 
-  if (isPending) {
-    return <LoadingSpinner />;
-  }
+  // if (isPending) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <div className="h-full flex flex-col relative ">
@@ -139,7 +139,7 @@ export function Dashboard() {
         {/* Navbar */}
         <div className="relative flex flex-1 items-center justify-end gap-3 sm:absolute sm:top-4 sm:right-4 ">
           {/* Country finder */}
-          <Select onValueChange={handleSelectCountry}>
+          {/* <Select onValueChange={handleSelectCountry}>
             <SelectTrigger className="w-[120px] sm:w-[160px] bg-gray-00/10 backdrop-blur-sm text-white">
               <SelectValue placeholder="All countries" />
             </SelectTrigger>
@@ -158,7 +158,7 @@ export function Dashboard() {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
           {/* Filter icon */}
           <DialogFilterButton />
           <SideDrawer

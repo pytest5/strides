@@ -16,12 +16,14 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
   const [viewState, setViewState] = React.useState<Coord>({
     latitude: 1.3521,
     longitude: 103.8198,
-    zoom: 9.8,
+    zoom: 7.4,
   });
+
   console.log("current zoom ", viewState.zoom);
   React.useEffect(() => {
     getUserLocation();
   }, []);
+
   const getUserLocation = (): Coord | undefined => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -29,7 +31,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
           setViewState({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            zoom: 10.8,
+            zoom: 7.4,
           });
         },
         (error) => {
@@ -131,7 +133,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
         // onZoom={(e) => setViewState({ ...viewState, zoom: e.viewState.zoom })} // Update zoom
         style={{ width: "100%", height: "100vh" }}
         // mapStyle="mapbox://styles/mapbox/streets-v9"
-        mapStyle="mapbox://styles/mapbox/dark-v11"
+        mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
         // className="w-full border-3 border-red-500"
         interactiveLayerIds={[clusterLayer.id, unclusteredPointLayer.id]}
         ref={ref}

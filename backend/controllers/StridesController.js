@@ -180,16 +180,17 @@ async function getClusters(req, res) {
     const Supercluster = (await import("supercluster")).default;
     console.log("zoom", req.body);
     const { zoom, bbox } = req.body;
-    const text =
-      "SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM curr_strides_location";
+    const text = `
+    SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM curr_strides_location
+    `;
     const data = await db.query(text);
     const geoJson = convertToGeoJson(data.rows);
+    console.log("here", geoJson);
     const index = new Supercluster({
       radius: 50, // Match Mapbox GL settings
       maxZoom: 14, // Match Mapbox GL maxZoom
     }).load(geoJson.features); //  Load GeoJSON features into Supercluster
     const clusters = index.getClusters(bbox, zoom); // Get clusters for the given bounding box and zoom level
-
     console.log("sending back geoJson clusters to frontend: ", clusters);
     res.json({
       // res.json needs to be in this shape as its going into a mapbox <Source

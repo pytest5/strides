@@ -1,14 +1,5 @@
-import React from "react";
 import { Source, Layer, LayerProps } from "react-map-gl";
-import { useFetch } from "@/hooks/use-fetch";
-import LoadingSpinner from "./LoadingSpinner";
-import Supercluster from "supercluster";
 import { useQuery } from "@tanstack/react-query";
-
-// const index = new Supercluster({
-//   radius: 50,
-//   maxZoom: 14,
-// }).load(points);
 
 export const clusterLayer: LayerProps = {
   id: "clusters",

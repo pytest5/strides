@@ -1,12 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X, User, ShoppingCart } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
-import { NavbarLinks } from "./NavbarLinks";
 import { useUser } from "./UserProvider";
 import { capitalizeFirstLetter } from "../utils/index.js";
 import { SideDrawer } from "./SideDrawer.js";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   DropdownMenu,
