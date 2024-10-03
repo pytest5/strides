@@ -2,6 +2,13 @@ import React from "react";
 import { Source, Layer, LayerProps } from "react-map-gl";
 import { useFetch } from "@/hooks/use-fetch";
 import LoadingSpinner from "./LoadingSpinner";
+import Supercluster from "supercluster";
+import { useQuery } from "@tanstack/react-query";
+
+// const index = new Supercluster({
+//   radius: 50,
+//   maxZoom: 14,
+// }).load(points);
 
 export const clusterLayer: LayerProps = {
   id: "clusters",
@@ -63,19 +70,45 @@ const convertJsonToGeoData = (jsonData) => {
   };
 };
 
-export const MapLayers = () => {
-  const { data, isPending } = useFetch("/api/strides/location", [
-    "fetchStrideLocations",
-  ]);
-  // const strides = stridesData;
-  // const mapMarkers = React.useMemo(
-  //   () => convertJsonToGeoData(strides),
-  //   [strides]
+export const MapLayers = ({ zoom = 14, bbox }) => {
+  // const { data, isPending } = useFetch("/api/strides/location", [
+  //   "fetchStrideLocations",
+  // ]);
+  // const currMapMarkers = React.useMemo(
+  //   () => convertJsonToGeoData(data),
+  //   [data]
   // );
-  const currMapMarkers = React.useMemo(
-    () => convertJsonToGeoData(data),
-    [data]
-  );
+
+  const fetchClusters = async () => {
+    const url = "/api/strides/clusters";
+    console.log("fetching cluster body", { zoom, bbox });
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({ zoom, bbox }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      console.log(json);
+      return json;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const { isPending, data: mapClusters } = useQuery({
+    queryKey: ["fetchClusters", zoom, bbox],
+    queryFn: fetchClusters,
+  });
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -85,10 +118,11 @@ export const MapLayers = () => {
     <Source
       id="strides-data"
       type="geojson"
-      data={currMapMarkers}
-      cluster={true}
-      clusterMaxZoom={14}
-      clusterRadius={50}
+      data={mapClusters}
+      // data={currMapMarkers}
+      // cluster={true}
+      // clusterMaxZoom={14}
+      // clusterRadius={50}
     >
       {/* <Layer {...layerStyle} /> */}
       <Layer {...clusterLayer} />

@@ -21,6 +21,8 @@ import { DialogFilterButton } from "./DialogFilterButton";
 import { useFetch } from "@/hooks/use-fetch";
 import fetchCountryCoords from "@/utils/fetchCountryCoords";
 import LoadingSpinner from "./LoadingSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { MapRef } from "react-map-gl";
 
 export function Dashboard() {
   // const [selectedLocation, setSelectedLocation] = useState(null);
@@ -30,8 +32,36 @@ export function Dashboard() {
   const { data, isPending } = useFetch("/api/strides/location", [
     "fetchStrideLocations",
   ]);
+
+  // const fetchClusters = async () => {
+  //   const url = "/api/strides/clusters";
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       body: JSON.stringify({ zoom: mapbox.getZoom() }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`Response status: ${response.status}`);
+  //     }
+  //     const json = await response.json();
+  //     console.log(json);
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       console.error(error.message);
+  //     } else {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  // const data = useQuery({
+  //   queryKey: ["fetchClusters"],
+  //   queryFn: fetchClusters,
+  // });
+
   const countryCoords = fetchCountryCoords(data);
-  const mapRef = React.useRef(null);
+
+  const mapRef = React.useRef<MapRef | null>(null);
 
   interface CountryPosition {
     latitude: number;

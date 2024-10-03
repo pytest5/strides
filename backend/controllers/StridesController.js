@@ -1,5 +1,7 @@
 const db = require("../db");
 const { capitalizeFirstLetter } = require("../utils");
+// const Supercluster = require("supercluster");
+const convertToGeoJson = require("../utils/convertToGeoJson");
 
 async function getStridesByCountry(req, res, next) {
   try {
@@ -173,6 +175,31 @@ async function getMyStrides(req, res, next) {
   }
 }
 
+async function getClusters(req, res) {
+  try {
+    const Supercluster = (await import("supercluster")).default;
+    console.log("zoom", req.body);
+    const { zoom, bbox } = req.body;
+    const text =
+      "SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM curr_strides_location";
+    const data = await db.query(text);
+    const geoJson = convertToGeoJson(data.rows);
+    const index = new Supercluster({
+      radius: 50, // Match Mapbox GL settings
+      maxZoom: 14, // Match Mapbox GL maxZoom
+    }).load(geoJson.features); //  Load GeoJSON features into Supercluster
+    const clusters = index.getClusters(bbox, zoom); // Get clusters for the given bounding box and zoom level
+    res.json({
+      // res.json needs to be in this shape as its going into a mapbox <Source
+      type: "FeatureCollection",
+      features: clusters, // The clusters array
+    });
+  } catch (error) {
+    console.error("Error fetching clusters:", error);
+    res.status(500).json({ error: "Failed to fetch clusters" });
+  }
+}
+
 module.exports = {
   getStridesByCountry,
   getAllStridesLocation,
@@ -183,4 +210,5 @@ module.exports = {
   deleteStride,
   updateStride,
   getMyStrides,
+  getClusters,
 };

@@ -9,11 +9,13 @@ const {
   deleteStride,
   updateStride,
   getMyStrides,
+  getClusters,
 } = require("../controllers/StridesController");
 const verifyToken = require("../middlewares/verifyToken");
 const router = express.Router();
 
 router.get("/location", getAllStridesLocation);
+router.post("/clusters", getClusters);
 router.get("/current/location", getCurrAllStridesLocation);
 router.get("/country/:country", getStridesByCountry);
 router.get("/total-stats", getTotalStridesStats);
