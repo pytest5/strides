@@ -4,8 +4,6 @@ import { MapLayers } from "./MapLayers.tsx";
 import type { MapRef, GeoJSONSource } from "react-map-gl";
 import { clusterLayer, unclusteredPointLayer } from "./MapLayers";
 
-(Map as any).mapboxgl = window.mapboxgl;
-
 interface Coord {
   latitude: number;
   longitude: number;
