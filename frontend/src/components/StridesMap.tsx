@@ -88,7 +88,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
       ref.current.flyTo({
         center: feature.geometry.coordinates,
         zoom: viewState.zoom < 9 ? viewState.zoom + 4 : viewState.zoom + 1,
-        duration: 2000,
+        duration: 1200,
       });
       // mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
       //   if (err) {
