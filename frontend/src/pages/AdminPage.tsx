@@ -308,7 +308,7 @@ export function AdminPage() {
   }
 
   return (
-    <Card className="w-full h-full ">
+    <Card className="w-full h-full border-2 flex flex-col">
       <CardHeader className="px-3 md:px-6">
         {/* <h1 className="text-2xl border-b-2 pb-3 mb-5">Admin</h1> */}
         <CardTitle>Strides</CardTitle>
@@ -316,93 +316,91 @@ export function AdminPage() {
           View and manage strides across different locations.{" "}
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-0 px-3 md:px-6">
-        <div className="rounded-md border overflow-hidden">
-          <div className="overflow-x-auto relative">
-            <table className="w-full text-sm">
-              <thead>
-                <tr>
-                  <th className="sticky left-0 z-20 bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground">
-                    Stride
+      <CardContent className="p-0 px-3 md:px-6 flex-grow min-h-0 ">
+        <div className="rounded-md overflow-auto relative h-full">
+          <table className="w-full text-sm">
+            <thead className="overflow-visible">
+              <tr className="">
+                <th className="sticky top-0 left-0 z-[3] bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground ">
+                  Stride
+                </th>
+                {[
+                  "Name",
+                  "Country",
+                  "Distance (m)",
+                  "Duration (mins)",
+                  "Team",
+                  "Created At",
+                  "Actions",
+                ].map((header) => (
+                  <th
+                    key={header}
+                    className="sticky top-0 bg-muted/50 z-[2] px-4 py-3 text-left font-medium text-muted-foreground whitespace-nowrap"
+                  >
+                    {header}
                   </th>
-                  {[
-                    "Name",
-                    "Country",
-                    "Distance (m)",
-                    "Duration (mins)",
-                    "Team",
-                    "Created At",
-                    "Actions",
-                  ].map((header) => (
-                    <th
-                      key={header}
-                      className="bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground whitespace-nowrap"
-                    >
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data?.map((stride) => (
-                  <tr key={stride.strides_id} className="border-t">
-                    <td className="sticky left-0 z-10 bg-background px-4 py-3 font-medium">
-                      {stride.strides_id}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.username}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.country}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.distance}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.duration}
-                    </td>
-                    <td className="px-4 py-3 max-w-[200px] truncate">
-                      {stride.team}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {convertDateTime(stride.created_at, stride.strides_id)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <EditStrideDialog
-                            stride={stride}
-                            onSave={() =>
-                              queryClient.invalidateQueries({
-                                queryKey: ["fetchAdminData"],
-                              })
-                            }
-                          />
-                          {/* <DropdownMenuItem>Duplicate</DropdownMenuItem> */}
-                          <DropdownMenuSeparator />
-                          {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
-                          <DropdownMenuItem
-                            onClick={() => {
-                              handleDelete(stride.strides_id);
-                            }}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </td>
-                  </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </thead>
+            <tbody className="h-full">
+              {data?.map((stride) => (
+                <tr key={stride.strides_id} className="border-t">
+                  <td className="sticky left-0 z-[1] bg-background px-4 py-3 font-medium  ">
+                    {stride.strides_id}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.username}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.country}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.distance}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.duration}
+                  </td>
+                  <td className="px-4 py-3 max-w-[200px] truncate">
+                    {stride.team}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {convertDateTime(stride.created_at, stride.strides_id)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <EditStrideDialog
+                          stride={stride}
+                          onSave={() =>
+                            queryClient.invalidateQueries({
+                              queryKey: ["fetchAdminData"],
+                            })
+                          }
+                        />
+                        {/* <DropdownMenuItem>Duplicate</DropdownMenuItem> */}
+                        <DropdownMenuSeparator />
+                        {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
+                        <DropdownMenuItem
+                          onClick={() => {
+                            handleDelete(stride.strides_id);
+                          }}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-between px-3 md:px-6">
@@ -411,12 +409,12 @@ export function AdminPage() {
           <strong>{data?.length}</strong> strides
         </p>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+          {/* <Button variant="outline" size="sm">
             Previous
           </Button>
           <Button variant="outline" size="sm">
             Next
-          </Button>
+          </Button> */}
         </div>
       </CardFooter>
     </Card>

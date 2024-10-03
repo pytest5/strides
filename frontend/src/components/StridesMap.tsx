@@ -1,10 +1,8 @@
 import Map, { Layer, Source } from "react-map-gl";
 import React from "react";
 import { MapLayers } from "./MapLayers.tsx";
-import type { MapRef } from "react-map-gl";
-import type { GeoJSONSource } from "mapbox-gl";
+import type { MapRef, GeoJSONSource } from "react-map-gl";
 import { clusterLayer, unclusteredPointLayer } from "./MapLayers";
-import Mapbox from "react-map-gl/dist/esm/mapbox/mapbox";
 
 interface Coord {
   latitude: number;
