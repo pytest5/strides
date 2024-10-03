@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { useState } from "react";
 import { ChevronRight, ChevronLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { StridesMap } from "./StridesMap";
+// import { StridesMap } from "./StridesMap";
 import { FrostedCardWrapper } from "./FrostedCardWrapper";
 import { TotalsOverview } from "./dashboard/TotalsOverview";
 import { ItemsBarChart } from "./dashboard/ItemsBarChart";
@@ -32,6 +32,8 @@ export function Dashboard() {
   const { data, isPending } = useFetch("/api/strides/location", [
     "fetchStrideLocations",
   ]);
+
+  const StridesMap = lazy(() => import("./StridesMap"));
 
   // const fetchClusters = async () => {
   //   const url = "/api/strides/clusters";
@@ -106,9 +108,10 @@ export function Dashboard() {
         className="absolute inset-0 bg-gray-700 "
         style={{ touchAction: "none" }}
       >
-        {/* Placeholder for map */}
         <div>
-          <StridesMap ref={mapRef} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <StridesMap ref={mapRef} />
+          </Suspense>
         </div>
       </div>
       {/* Top Navbar */}

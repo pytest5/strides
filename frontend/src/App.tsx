@@ -8,7 +8,7 @@ import SignUpPage from "./pages/SignupPage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import { UserProvider } from "./components/UserProvider.tsx";
 import { protectedAdminLoader } from "./loaders/protectedAdminLoader.tsx";
-import { StridesMap } from "./components/StridesMap.tsx";
+import StridesMap from "./components/StridesMap.tsx";
 import { Dashboard } from "./components/Dashboard.tsx";
 import AddStridesPage from "./pages/AddStridesPage.tsx";
 import TeamsPage from "./pages/TeamsPage.tsx";
