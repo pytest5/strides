@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -26,10 +26,6 @@ async function action({ request }: { params?: string; request: Request }) {
   return redirect("/admin");
 }
 
-function checkIfUniqueEmail() {
-  return true;
-} // TODO
-
 export type FieldTypes = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
@@ -46,12 +42,6 @@ const formSchema = z.object({
     })
     .email("This is not a valid email.")
     .max(50),
-  /*  TODO
-   .refine(async (e) => {
-      // Where checkIfEmailIsValid makes a request to the backend
-      // to see if the email is valid.
-      return await checkIfUniqueEmail();
-    }, "This email is already in our database"), */
   password: z
     .string()
     .min(2, {
@@ -75,14 +65,36 @@ export default function SignupForm() {
 
   const {
     formState: { errors },
+    setError,
   } = form;
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const token = await authService.signup(values);
-    localStorage.setItem("jwt", JSON.stringify(token));
-    navigate("/");
-    triggerToast("signup", { data: capitalizeFirstLetter(values.username) });
-  }
+  console.log(errors);
+
+  const onSubmit: SubmitHandler<FieldTypes> = async (values) => {
+    try {
+      const token = await authService.signup(values);
+      localStorage.setItem("jwt", JSON.stringify(token));
+      navigate("/");
+      triggerToast("signup", { data: capitalizeFirstLetter(values.username) });
+    } catch (e) {
+      if (e instanceof Error) {
+        if (
+          e.message ===
+          'duplicate key value violates unique constraint "users_email_key"'
+        ) {
+          setError("email", {
+            type: "custom",
+            message: "Email is already registered.",
+          });
+        } else {
+          setError("root.signupError", {
+            type: "custom",
+            message: e.message,
+          });
+        }
+      }
+    }
+  };
 
   return (
     <Form {...form}>
@@ -141,6 +153,11 @@ export default function SignupForm() {
             <CountrySelector field={field} form={form}></CountrySelector>
           )}
         />
+        {errors?.root && (
+          <div className="text-[0.8rem] font-medium text-destructive">
+            {errors.root?.signupError.message}
+          </div>
+        )}
         <Button type="submit">Submit</Button>
       </form>
     </Form>
