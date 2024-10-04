@@ -23,16 +23,18 @@ const signup = async (formData: {
       },
     });
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Response status: ${response.status}`);
     }
     const json = await response.json();
     return json;
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error signing up.", error.message);
+      throw error;
     }
     console.error(error);
-    throw new Error("Unexpected error occurred");
+    throw error;
   }
 };
 

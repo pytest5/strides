@@ -8,7 +8,7 @@ function getAllUsers(params) {}
 
 async function userSignup(req, res, next) {
   const { username, password, email, country: country_id } = req.body;
-  console.log(req.body);
+  console.log("req body: ", req.body);
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   let role = "user";
@@ -18,7 +18,6 @@ async function userSignup(req, res, next) {
   try {
     const dbRes = await db.query(text, values);
     const { id, username, role, email, country_id } = dbRes.rows[0];
-    console.log("data", { id, username, role, email, country_id });
     // sign token
     const secret_key = process.env.SECRET_KEY;
     const token = jwt.sign(
@@ -27,7 +26,6 @@ async function userSignup(req, res, next) {
     );
     res.status(201).json(token);
   } catch (e) {
-    console.log(e.message);
     res.status(500).json({ error: e.message });
   }
 }
