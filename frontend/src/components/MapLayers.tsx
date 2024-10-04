@@ -1,5 +1,6 @@
 import { Source, Layer, LayerProps } from "react-map-gl";
 import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "./LoadingSpinner";
 
 export const clusterLayer: LayerProps = {
   id: "clusters",
@@ -45,31 +46,12 @@ export const unclusteredPointLayer: LayerProps = {
   },
 };
 
-const convertJsonToGeoData = (jsonData) => {
-  return {
-    type: "FeatureCollection",
-    features: jsonData?.map(({ id, latitude, longitude }) => ({
-      type: "Feature",
-      geometry: {
-        coordinates: [longitude, latitude],
-        type: "Point",
-      },
-      properties: {
-        id: id,
-      },
-    })),
-  };
+type Props = {
+  zoom: number;
+  bbox: [];
 };
 
-export const MapLayers = ({ zoom = 14, bbox }) => {
-  // const { data, isPending } = useFetch("/api/strides/location", [
-  //   "fetchStrideLocations",
-  // ]);
-  // const currMapMarkers = React.useMemo(
-  //   () => convertJsonToGeoData(data),
-  //   [data]
-  // );
-
+export const MapLayers = ({ zoom = 14, bbox }: Props) => {
   const fetchClusters = async () => {
     const url = "/api/strides/clusters";
     console.log("fetching cluster body", { zoom, bbox });
@@ -103,7 +85,9 @@ export const MapLayers = ({ zoom = 14, bbox }) => {
     queryFn: fetchClusters,
   });
 
-  console.log("map clusters: ", mapClusters);
+  if (!mapClusters) {
+    return <LoadingSpinner />;
+  }
 
   // if (isPending) {
   //   return <LoadingSpinner />;
