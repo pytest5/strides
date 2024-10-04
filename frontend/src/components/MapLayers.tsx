@@ -102,9 +102,6 @@ export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
       id="strides-data"
       type="geojson"
       data={mapClusters} // Default to empty GeoJSON
-      cluster={true}
-      clusterMaxZoom={14}
-      clusterRadius={50}
     >
       <Layer {...clusterLayer} />
       <Layer {...clusterCountLayer} />
