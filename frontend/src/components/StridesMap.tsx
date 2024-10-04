@@ -89,7 +89,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
     }
   };
 
-  const onMoveEnd = () => {
+  const onMoveEnd = (e) => {
     setViewState({
       longitude: e.viewState.longitude,
       latitude: e.viewState.latitude,
