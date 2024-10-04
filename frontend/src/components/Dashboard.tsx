@@ -1,5 +1,4 @@
-import React, { Suspense, lazy } from "react";
-import { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { ChevronRight, ChevronLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
@@ -7,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { FrostedCardWrapper } from "./FrostedCardWrapper";
 import { TotalsOverview } from "./dashboard/TotalsOverview";
 import { DialogFilterButton } from "./DialogFilterButton";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner"; // Assuming this is your loading indicator
 import { MapRef } from "react-map-gl";
 import data from "../data/countries_with_coords.json";
 import CountryFinder from "./CountryFinder";
@@ -15,18 +14,15 @@ import CountryFinder from "./CountryFinder";
 const ItemsBarChart = lazy(() => import("./dashboard/ItemsBarChart"));
 const ItemsPieChart = lazy(() => import("./dashboard/ItemsPieChart"));
 const StridesMap = lazy(() => import("./StridesMap"));
-const SideDrawer = lazy(() => import("./SideDrawer"));
 
 export function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loadingCharts, setLoadingCharts] = useState(false);
-
   const mapRef = React.useRef<MapRef | null>(null);
+
   const handleSelectCountry = (countryName: string) => {
     const selectedCountry = data.find((i) => i.name === countryName);
     if (selectedCountry) {
       const { latitude, longitude } = selectedCountry;
-      console.log("Flying to:  ", latitude, longitude);
       if (mapRef.current) {
         mapRef.current.flyTo({
           center: [longitude, latitude],
@@ -39,37 +35,20 @@ export function Dashboard() {
   };
 
   const toggleSidebar = () => {
-    React.startTransition(() => {
-      setSidebarOpen(!sidebarOpen);
-    });
-    // Load charts after opening the sidebar
-    if (!sidebarOpen) {
-      setLoadingCharts(true);
-      setTimeout(() => setLoadingCharts(false), 500); // Simulate a slight delay for smooth transition
-    }
-    // setSidebarOpen(!sidebarOpen);
-    // mapRef.current.resize();
+    setSidebarOpen(!sidebarOpen);
   };
 
-  // if (isPending) {
-  //   return <LoadingSpinner />;
-  // }
-
   return (
-    <div className="h-full flex flex-col relative ">
+    <div className="h-full flex flex-col relative">
       {/* Map */}
-      <div
-        className="absolute inset-0 bg-gray-700 "
-        style={{ touchAction: "none" }}
-      >
-        <div>
-          <Suspense fallback={<LoadingSpinner />}>
-            <StridesMap ref={mapRef} />
-          </Suspense>
-        </div>
+      <div className="absolute inset-0 bg-gray-700">
+        <Suspense fallback={<LoadingSpinner />}>
+          <StridesMap ref={mapRef} />
+        </Suspense>
       </div>
+
       {/* Top Navbar */}
-      <div className=" w-full sticky top-0 flex self-start justify-between gap-3 pt-4 px-4  bg-transparent">
+      <div className="w-full sticky top-0 flex self-start justify-between gap-3 pt-4 px-4 bg-transparent">
         {/* Sidebar Toggle Button */}
         <div
           className={`h-full relative sm:absolute sm:top-4 sm: transition-all duration-300 ease-in-out ${
@@ -89,6 +68,7 @@ export function Dashboard() {
             )}
           </Button>
         </div>
+
         {/* Navbar */}
         <div className="relative flex flex-1 items-center justify-end gap-3 sm:absolute sm:top-4 sm:right-4 ">
           {/* Country finder */}
@@ -98,15 +78,9 @@ export function Dashboard() {
           />
           {/* Filter icon */}
           <DialogFilterButton />
-          <SideDrawer
-            trigger={
-              <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
-                <Menu className="block h-6 w-6 text-white" />
-              </button>
-            }
-          />
         </div>
       </div>
+
       {/* Sidebar */}
       {sidebarOpen && (
         <div
@@ -114,38 +88,36 @@ export function Dashboard() {
             sidebarOpen ? "w-full sm:w-96" : "w-0"
           }`}
         >
-          {/* <div className="h-full bg-white/10 backdrop-blur-md border-r border-white/20 overflow-y-auto custom-scrollbar"></div> */}
-          <div className="h-full border-r border-white/20 ">
-            <div className="p-4 space-y-4  sm:h-full sm:overflow-auto flex flex-col custom-scrollbar sm:pr-0">
+          <div className="h-full border-r border-white/20">
+            <div className="p-4 space-y-4 sm:h-full sm:overflow-auto flex flex-col custom-scrollbar sm:pr-0">
               {/* Team searcher */}
               <Input
                 type="text"
                 placeholder="Search a team..."
                 className="px-4 py-2 rounded-lg text-black w-full sm:w-45 bg-white/80 backdrop-blur-sm"
               />
-              {!loadingCharts && (
-                <>
+
+              {/* Conditionally load the heavy components when the sidebar is open */}
+              {sidebarOpen && (
+                <Suspense fallback={<LoadingSpinner />}>
                   {/* Items bar chart */}
                   <FrostedCardWrapper>
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <ItemsBarChart />
-                    </Suspense>
+                    <ItemsBarChart />
                   </FrostedCardWrapper>
 
                   {/* Items pie chart */}
                   <FrostedCardWrapper>
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <ItemsPieChart />
-                    </Suspense>
+                    <ItemsPieChart />
                   </FrostedCardWrapper>
-                </>
+                </Suspense>
               )}
 
               {/* Totals overview */}
               <FrostedCardWrapper>
                 <TotalsOverview />
               </FrostedCardWrapper>
-              {/* Leader board */}
+
+              {/* Leaderboard */}
               <FrostedCardWrapper>
                 <CardContent className="p-4">
                   <h3 className="font-bold mb-2">Strides Leaderboard</h3>
@@ -176,20 +148,6 @@ export function Dashboard() {
           </div>
         </div>
       )}
-      {/* Location Card */}
-      {/* {selectedLocation && (
-        <Card className="absolute top-20 sm:top-4 right-4 left-4 sm:left-auto sm:w-64 bg-white/10 backdrop-blur-md border-white/20">
-          <CardContent className="p-4">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-bold">{selectedLocation.name}</h3>
-              <Button variant="ghost" size="icon" onClick={closeLocationCard}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            <p>{selectedLocation.description}</p>
-          </CardContent>
-        </Card>
-      )} */}
     </div>
   );
 }
