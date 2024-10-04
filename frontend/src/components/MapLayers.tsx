@@ -1,5 +1,5 @@
 import { Source, Layer, LayerProps } from "react-map-gl";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import LoadingSpinner from "./LoadingSpinner";
 
 export const clusterLayer: LayerProps = {
@@ -86,7 +86,9 @@ export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
     queryKey: ["fetchClusters", zoom, bbox],
     queryFn: fetchClusters,
     enabled: !!bbox,
-    staleTime: 100000,
+    staleTime: 100000, // Data is considered fresh for 10 minutes
+    refetchOnWindowFocus: false, // Disable refetch when the window regains focus
+    placeholderData: keepPreviousData,
   });
 
   if (!mapClusters && isInitialLoad) {
