@@ -74,7 +74,7 @@ const chartData = data.map((i, idx) => ({
   color: colors[idx],
 }));
 
-export const ItemsPieChart = () => (
+const ItemsPieChart = () => (
   <Card className="h-[424px] bg-transparent border-none shadow-none">
     <CardHeader className="p-0 pb-1">
       <CardTitle>Top items collected breakdown by %</CardTitle>
@@ -181,3 +181,5 @@ export const ItemsPieChart = () => (
     </CardFooter>
   </Card>
 );
+
+export default ItemsPieChart;

@@ -2,91 +2,34 @@ import React, { Suspense, lazy } from "react";
 import { useState } from "react";
 import { ChevronRight, ChevronLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-// import { StridesMap } from "./StridesMap";
 import { FrostedCardWrapper } from "./FrostedCardWrapper";
 import { TotalsOverview } from "./dashboard/TotalsOverview";
-import { ItemsBarChart } from "./dashboard/ItemsBarChart";
-import { ItemsPieChart } from "./dashboard/ItemsPieChart";
 import { SideDrawer } from "./SideDrawer";
 import { DialogFilterButton } from "./DialogFilterButton";
-import { useFetch } from "@/hooks/use-fetch";
-import fetchCountryCoords from "@/utils/fetchCountryCoords";
 import LoadingSpinner from "./LoadingSpinner";
-import { useQuery } from "@tanstack/react-query";
 import { MapRef } from "react-map-gl";
+import data from "../data/countries_with_coords.json";
+import CountryFinder from "./CountryFinder";
+
+const ItemsBarChart = lazy(() => import("./dashboard/ItemsBarChart"));
+const ItemsPieChart = lazy(() => import("./dashboard/ItemsPieChart"));
+const StridesMap = lazy(() => import("./StridesMap"));
 
 export function Dashboard() {
-  // const [selectedLocation, setSelectedLocation] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  // const { data, isPending } = useFetch("/api/strides/location", [
-  //   "fetchStrideLocations",
-  // ]);
-
-  const StridesMap = lazy(() => import("./StridesMap"));
-
-  // const fetchClusters = async () => {
-  //   const url = "/api/strides/clusters";
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       body: JSON.stringify({ zoom: mapbox.getZoom() }),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(`Response status: ${response.status}`);
-  //     }
-  //     const json = await response.json();
-  //     console.log(json);
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       console.error(error.message);
-  //     } else {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
-
-  // const data = useQuery({
-  //   queryKey: ["fetchClusters"],
-  //   queryFn: fetchClusters,
-  // });
-
-  // const countryCoords = fetchCountryCoords(data);
-
   const mapRef = React.useRef<MapRef | null>(null);
-
-  interface CountryPosition {
-    latitude: number;
-    longitude: number;
-  }
-
-  // type CountryCoord = { name: string; coordinates: CountryPosition };
-
-  // const countryCoordsTyped: CountryCoord[] = countryCoords;
-
   const handleSelectCountry = (countryName: string) => {
-    setSelectedCountry(countryName);
-    const selectedCountry = countryCoordsTyped.find(
-      (i) => i.name === countryName
-    );
+    const selectedCountry = data.find((i) => i.name === countryName);
     if (selectedCountry) {
-      const { latitude, longitude } = selectedCountry.coordinates;
+      const { latitude, longitude } = selectedCountry;
       console.log("Flying to:  ", latitude, longitude);
       if (mapRef.current) {
         mapRef.current.flyTo({
           center: [longitude, latitude],
           zoom: 5,
-          duration: 12000,
+          duration: 6000,
           essential: true,
         });
       }
@@ -139,26 +82,10 @@ export function Dashboard() {
         {/* Navbar */}
         <div className="relative flex flex-1 items-center justify-end gap-3 sm:absolute sm:top-4 sm:right-4 ">
           {/* Country finder */}
-          {/* <Select onValueChange={handleSelectCountry}>
-            <SelectTrigger className="w-[120px] sm:w-[160px] bg-gray-00/10 backdrop-blur-sm text-white">
-              <SelectValue placeholder="All countries" />
-            </SelectTrigger>
-            <SelectContent>
-              <div className="p-2">
-                <Input
-                  placeholder="Search countries..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="mb-2"
-                />
-              </div>
-              {countryCoords?.map((country) => (
-                <SelectItem key={country.name} value={country.name}>
-                  {country.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
+          <CountryFinder
+            handleSelect={handleSelectCountry}
+            className="bg-gray-00/10 backdrop-blur-sm text-white"
+          />
           {/* Filter icon */}
           <DialogFilterButton />
           <SideDrawer
@@ -170,7 +97,6 @@ export function Dashboard() {
           />
         </div>
       </div>
-
       {/* Sidebar */}
       <div
         className={`flex-1 overflow-auto sm:h-full relative sm:absolute top-0 left-0 transition-all duration-300 ease-in-out z-10 ${
@@ -188,11 +114,15 @@ export function Dashboard() {
             />
             {/* Items bar chart */}
             <FrostedCardWrapper>
-              <ItemsBarChart />
+              <Suspense fallback={<LoadingSpinner />}>
+                <ItemsBarChart />
+              </Suspense>
             </FrostedCardWrapper>
             {/* Items pie chart */}
             <FrostedCardWrapper>
-              <ItemsPieChart />
+              <Suspense fallback={<LoadingSpinner />}>
+                <ItemsPieChart />
+              </Suspense>
             </FrostedCardWrapper>
             {/* Totals overview */}
             <FrostedCardWrapper>

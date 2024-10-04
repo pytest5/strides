@@ -43,7 +43,7 @@ const colors = [
 
 const chartData = data.map((i, idx) => ({ ...i, fill: colors[idx] }));
 
-export function ItemsBarChart() {
+export default function ItemsBarChart() {
   // TODO PUT THIS IN DB
   // const { data, isPending } = useFetch("/api/items/current/totals", [
   //   "fetchCurrItemsTotals",

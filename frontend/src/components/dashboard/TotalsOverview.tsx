@@ -84,21 +84,6 @@ const statItems: StatItem[] = [
 ];
 
 export const TotalsOverview = () => {
-  // const { data, isFetching, isPending } = useFetch(
-  //   "/api/strides/current/total-stats",
-  //   "TotalsOverview"
-  // );
-  // if (isFetching) return <h1>"Loading for the first time"</h1>;
-  // if (isPending) return <h1>"Refetching data in the background"</h1>;
-  // const statsData = [
-  //   data[0].total_strides_countries,
-  //   data[0].total_strides_users,
-  //   data[0].total_strides,
-  //   data[0].total_items_picked,
-  //   data[0].total_weight,
-  //   data[0].total_distance,
-  //   data[0].total_time_in_minutes,
-  // ];
   const statsData = [
     46,
     "10,809",
