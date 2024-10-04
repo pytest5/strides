@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-export const DropDownStrideMenu = () => {
+export const DropDownTeamsMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -15,15 +15,15 @@ export const DropDownStrideMenu = () => {
           variant="ghost"
           className="text-s font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out px-3 py-2 sm:px-2 md:px-3"
         >
-          Strides
+          Teams
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link to="strides/add">Add Stride</Link>
+          <Link to="teams/add">Add Team</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="strides">My Strides</Link>
+          <Link to="teams">My Teams</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

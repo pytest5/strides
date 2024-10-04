@@ -19,6 +19,8 @@ const SideDrawer = lazy(() => import("./SideDrawer"));
 
 export function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loadingCharts, setLoadingCharts] = useState(false);
+
   const mapRef = React.useRef<MapRef | null>(null);
   const handleSelectCountry = (countryName: string) => {
     const selectedCountry = data.find((i) => i.name === countryName);
@@ -40,6 +42,11 @@ export function Dashboard() {
     React.startTransition(() => {
       setSidebarOpen(!sidebarOpen);
     });
+    // Load charts after opening the sidebar
+    if (!sidebarOpen) {
+      setLoadingCharts(true);
+      setTimeout(() => setLoadingCharts(false), 500); // Simulate a slight delay for smooth transition
+    }
     // setSidebarOpen(!sidebarOpen);
     // mapRef.current.resize();
   };
@@ -116,18 +123,24 @@ export function Dashboard() {
                 placeholder="Search a team..."
                 className="px-4 py-2 rounded-lg text-black w-full sm:w-45 bg-white/80 backdrop-blur-sm"
               />
-              {/* Items bar chart */}
-              <FrostedCardWrapper>
-                <Suspense fallback={<LoadingSpinner />}>
-                  <ItemsBarChart />
-                </Suspense>
-              </FrostedCardWrapper>
-              {/* Items pie chart */}
-              <FrostedCardWrapper>
-                <Suspense fallback={<LoadingSpinner />}>
-                  <ItemsPieChart />
-                </Suspense>
-              </FrostedCardWrapper>
+              {!loadingCharts && (
+                <>
+                  {/* Items bar chart */}
+                  <FrostedCardWrapper>
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <ItemsBarChart />
+                    </Suspense>
+                  </FrostedCardWrapper>
+
+                  {/* Items pie chart */}
+                  <FrostedCardWrapper>
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <ItemsPieChart />
+                    </Suspense>
+                  </FrostedCardWrapper>
+                </>
+              )}
+
               {/* Totals overview */}
               <FrostedCardWrapper>
                 <TotalsOverview />

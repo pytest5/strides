@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import {
   Table,
   TableBody,
@@ -19,6 +20,7 @@ import { useUser } from "./UserProvider";
 import LoadingSpinner from "./LoadingSpinner";
 import { useJoinTeam } from "@/hooks/use-join-team";
 import { useLeaveTeam } from "@/hooks/use-leave-team";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 type Team = {
   id: string;
@@ -49,45 +51,47 @@ export const TeamTable = ({ teams, isPublic }: Props) => {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Location</TableHead>
-          <TableHead className="w-[100px]">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {teams?.map((team) => (
-          <TableRow key={`${team.id}-${isPublic}`}>
-            <TableCell className="font-medium">{team.name}</TableCell>
-            <TableCell>{team.location}</TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {isPublic ? (
-                    <DropdownMenuItem onClick={handleJoinTeam(team.id)}>
-                      Join Team
-                    </DropdownMenuItem>
-                  ) : (
-                    <>
-                      <DropdownMenuItem onClick={handleLeaveTeam(team.id)}>
-                        Leave Team
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+    <ScrollArea className="h-[400px] ">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead className="w-[100px]">Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody className="">
+          {teams?.map((team) => (
+            <TableRow key={`${team.id}-${isPublic}`}>
+              <TableCell className="font-medium">{team.name}</TableCell>
+              <TableCell>{team.location}</TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {isPublic ? (
+                      <DropdownMenuItem onClick={handleJoinTeam(team.id)}>
+                        Join Team
+                      </DropdownMenuItem>
+                    ) : (
+                      <>
+                        <DropdownMenuItem onClick={handleLeaveTeam(team.id)}>
+                          Leave Team
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </ScrollArea>
   );
 };

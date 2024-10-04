@@ -1,7 +1,7 @@
 import React from "react";
 import { NavbarLink } from "./NavbarLink";
 import { ChevronDown } from "lucide-react";
-import { NavbarAboutUs } from "./NavbarAboutUs";
+
 import { useUser } from "./UserProvider";
 
 export const NavbarLinks = ({ variant }: { variant?: "horizontal" }) => {
@@ -67,17 +67,6 @@ export const NavbarLinks = ({ variant }: { variant?: "horizontal" }) => {
             }`}
           />
         </button>
-        {isAboutOpen && (
-          <div
-            className={`${
-              isHorizontal
-                ? "absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                : ""
-            }`}
-          >
-            <NavbarAboutUs className="py-1" />
-          </div>
-        )}
       </div>
     </>
   );

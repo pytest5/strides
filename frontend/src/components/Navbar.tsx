@@ -18,7 +18,7 @@ import { AdminBadge } from "./AdminBadge.js";
 import { HorizontalNavbarLinks } from "./HorizontalNavbarLinks.js";
 
 export default function Navbar() {
-  const { user, isLoggedIn, isAdmin } = useUser();
+  const { user, isLoggedIn } = useUser();
 
   return (
     <nav className="shadow-sm py-3  ">
@@ -44,12 +44,12 @@ export default function Navbar() {
             )}
           </Button>
           <AdminBadge />
-          <Button className="relative py-1 px-3 h-7 font-normal">
+          {/* <Button className="relative py-1 px-3 h-7 font-normal">
             Shop now
             <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
               0
             </span>
-          </Button>
+          </Button> */}
         </div>
         <div className="-mr-2 flex items-center sm:hidden">
           {isLoggedIn && (
