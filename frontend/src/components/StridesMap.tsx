@@ -18,10 +18,15 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
     longitude: 103.8198,
     zoom: 10.4,
   });
+  const initialLoadRef = React.useRef(true);
 
   console.log("current zoom ", viewState.zoom);
+
   React.useEffect(() => {
-    getUserLocation();
+    const location = getUserLocation();
+    if (location) {
+      setViewState(location);
+    }
   }, []);
 
   const getUserLocation = (): Coord | undefined => {
@@ -50,31 +55,6 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
     }
   };
 
-  // const onClick = (event) => {
-  //   const features = event.features;
-
-  //   if (!features.length) return;
-  //   const feature = features[0];
-  //   console.log(feature);
-  //   const clusterId = feature?.properties.cluster_id;
-  //   if (!clusterId) {
-  //     return;
-  //     // reverse geocode and do something here with the lat lon?
-  //   }
-  //   const mapboxSource = ref.current.getSource(
-  //     "strides-data"
-  //   ) as GeoJSONSource;
-  //   mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
-  //     if (err) {
-  //       return;
-  //     }
-  //     ref.current.easeTo({
-  //       center: feature.geometry.coordinates,
-  //       zoom,
-  //       duration: 500,
-  //     });
-  //   });
-  // };
   const onClick = (event) => {
     const features = event.features;
     if (!features.length) return;
@@ -95,21 +75,48 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
         zoom: viewState.zoom < 9 ? viewState.zoom + 4 : viewState.zoom + 1,
         duration: 1200,
       });
-      // mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
-      //   if (err) {
-      //     console.error("Error expanding cluster:", err);
-      //     return;
-      //   }
-      //   ref.current.flyTo({
-      //     center: feature.geometry.coordinates,
-      //     zoom: zoom,
-      //     duration: 500,
-      //   });
-      // });
     } else {
       console.log("clicked on an unclustered point ", feature);
     }
   };
+
+  const onIdle = () => {
+    if (ref.current && initialLoadRef.current) {
+      const bounds = ref.current.getBounds().toArray().flat();
+      console.log("Initial bounds on load:", bounds);
+      setBbox(bounds); // Set bbox once during the initial load
+      initialLoadRef.current = false; // Set to false after the first load
+    }
+  };
+
+  const onMoveEnd = () => {
+    setViewState({
+      longitude: e.viewState.longitude,
+      latitude: e.viewState.latitude,
+      zoom: e.viewState.zoom,
+    });
+    if (ref.current) {
+      const bounds = ref.current.getBounds().toArray().flat();
+      console.log(bounds);
+      setBbox(bounds);
+    }
+  };
+
+  const memoizedMapLayers = React.useMemo(
+    () => (
+      <MapLayers
+        zoom={viewState.zoom}
+        bbox={bbox}
+        isInitialLoad={initialLoadRef.current}
+      />
+    ),
+    [viewState.zoom, bbox]
+  );
+
+  console.log("bbox", bbox);
+
+  // if (!bbox) return <LoadingSpinner></LoadingSpinner>;
+
   return (
     <div>
       <Map
@@ -118,23 +125,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
         // {...viewState}
         initialViewState={viewState}
-        onMove={(e) => {
-          // setViewState(e.viewState);
-          // if (ref.current) {
-          //   const bounds = ref.current.getBounds().toArray().flat();
-          //   console.log(bounds);
-          //   setBbox(bounds);
-          // }
-        }}
-        onIdle={(e) => {
-          if (ref.current) {
-            console.log("onload of map");
-            const bounds = ref.current.getBounds().toArray().flat();
-            console.log(bounds);
-            setBbox(bounds);
-          }
-          console.log("onload wrong");
-        }}
+        onIdle={onIdle}
         // onZoom={(e) => setViewState({ ...viewState, zoom: e.viewState.zoom })} // Update zoom
         style={{ width: "100%", height: "100vh" }}
         // mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -142,21 +133,22 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
         // className="w-full border-3 border-red-500"
         interactiveLayerIds={[clusterLayer.id, unclusteredPointLayer.id]}
         ref={ref}
-        onMoveEnd={(e) => {
-          setViewState({
-            ...viewState,
-            longitude: e.viewState.longitude,
-            latitude: e.viewState.latitude,
-            zoom: e.viewState.zoom,
-          });
-          if (ref.current) {
-            const bounds = ref.current.getBounds().toArray().flat();
-            console.log(bounds);
-            setBbox(bounds);
-          }
-        }}
+        onMoveEnd={onMoveEnd}
+        // onMoveEnd={(e) => {
+        //   setViewState({
+        //     ...viewState,
+        //     longitude: e.viewState.longitude,
+        //     latitude: e.viewState.latitude,
+        //     zoom: e.viewState.zoom,
+        //   });
+        //   if (ref.current) {
+        //     const bounds = ref.current.getBounds().toArray().flat();
+        //     console.log(bounds);
+        //     setBbox(bounds);
+        //   }
+        // }}
       >
-        {bbox && <MapLayers zoom={viewState.zoom} bbox={bbox} />}
+        {bbox && memoizedMapLayers}
       </Map>
     </div>
   );

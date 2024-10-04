@@ -49,9 +49,10 @@ export const unclusteredPointLayer: LayerProps = {
 type Props = {
   zoom: number;
   bbox: [];
+  isInitialLoad: boolean;
 };
 
-export const MapLayers = ({ zoom = 14, bbox }: Props) => {
+export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
   const fetchClusters = async () => {
     const url = "/api/strides/clusters";
     console.log("fetching cluster body", { zoom, bbox });
@@ -67,6 +68,7 @@ export const MapLayers = ({ zoom = 14, bbox }: Props) => {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
+
       console.log("fetched clusters data", json);
       return json;
     } catch (error) {
@@ -83,11 +85,13 @@ export const MapLayers = ({ zoom = 14, bbox }: Props) => {
   const { isPending, data: mapClusters } = useQuery({
     queryKey: ["fetchClusters", zoom, bbox],
     queryFn: fetchClusters,
+    enabled: !!bbox,
+    staleTime: 100000,
   });
 
-  // if (!mapClusters) {
-  //   return <LoadingSpinner />;
-  // }
+  if (!mapClusters && isInitialLoad) {
+    return <LoadingSpinner className="text-gray-200" />;
+  }
 
   // if (isPending) {
   //   return <LoadingSpinner />;
