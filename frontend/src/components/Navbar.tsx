@@ -3,7 +3,7 @@ import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { useUser } from "./UserProvider";
 import { capitalizeFirstLetter } from "../utils/index.js";
-import { SideDrawer } from "./SideDrawer.js";
+import SideDrawer from "./SideDrawer.js";
 
 import {
   DropdownMenu,

@@ -19,7 +19,7 @@ import { NavbarAboutUs } from "./NavbarAboutUs";
 import React from "react";
 import { DialogLogoutButton } from "./DialogLogoutButton";
 
-export function SideDrawer({
+export default function SideDrawer({
   trigger,
   side,
 }: {

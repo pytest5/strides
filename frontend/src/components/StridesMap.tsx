@@ -31,7 +31,7 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
           setViewState({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            zoom: 9.8,
+            zoom: 10.4,
           });
         },
         (error) => {
