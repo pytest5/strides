@@ -85,9 +85,9 @@ export const MapLayers = ({ zoom = 14, bbox }: Props) => {
     queryFn: fetchClusters,
   });
 
-  if (!mapClusters) {
-    return <LoadingSpinner />;
-  }
+  // if (!mapClusters) {
+  //   return <LoadingSpinner />;
+  // }
 
   // if (isPending) {
   //   return <LoadingSpinner />;
