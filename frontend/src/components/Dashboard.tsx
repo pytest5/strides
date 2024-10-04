@@ -10,6 +10,7 @@ import LoadingSpinner from "./LoadingSpinner"; // Assuming this is your loading 
 import { MapRef } from "react-map-gl";
 import data from "../data/countries_with_coords.json";
 import CountryFinder from "./CountryFinder";
+import SideDrawer from "./SideDrawer";
 
 const ItemsBarChart = lazy(() => import("./dashboard/ItemsBarChart"));
 const ItemsPieChart = lazy(() => import("./dashboard/ItemsPieChart"));
@@ -42,7 +43,7 @@ export function Dashboard() {
     <div className="h-full flex flex-col relative">
       {/* Map */}
       <div className="absolute inset-0 bg-gray-700">
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<LoadingSpinner className="text-gray-200" />}>
           <StridesMap ref={mapRef} />
         </Suspense>
       </div>
@@ -77,7 +78,14 @@ export function Dashboard() {
             className="bg-gray-00/10 backdrop-blur-sm text-white"
           />
           {/* Filter icon */}
-          <DialogFilterButton />
+          {/* <DialogFilterButton /> */}
+          <SideDrawer
+            trigger={
+              <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                <Menu className="block h-6 w-6 text-white" />
+              </button>
+            }
+          />
         </div>
       </div>
 

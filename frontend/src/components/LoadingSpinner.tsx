@@ -1,10 +1,14 @@
 import { LoaderIcon } from "lucide-react";
 import React from "react";
 
-const LoadingSpinner = () => {
+interface Props {
+  className?: string;
+}
+
+const LoadingSpinner = ({ className }: Props) => {
   return (
     <div className="w-full h-full grid place-content-center">
-      <LoaderIcon className="animate-spin" />
+      <LoaderIcon className={`animate-spin ${className}`} />
     </div>
   );
 };
