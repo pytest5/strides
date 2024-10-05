@@ -48,22 +48,18 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import convertDateTime from "@/utils/convertDateTime";
 
 interface Stride {
-  stride_id: number;
-  username: string;
-  country: string;
   distance: number;
   duration: number;
-  team: string;
   team_id: number | null;
-  created_at: string;
 }
-interface UserStrideData {
-  created_at: string; // "2024-09-28T00:27:20.058Z"
-  distance: number; // 10
-  duration: number; // 3
-  id: number; // 220
-  team_name: string; // "ele1"
+interface FetchedUserData {
+  created_at: string;
+  distance: number;
+  duration: number;
+  team_name: string;
   stride_id: number;
+  address: string;
+  team_id: number | null;
 }
 
 export type EditStrideFormType = z.infer<typeof formSchema>;
@@ -75,7 +71,7 @@ const formSchema = z.object({
   duration: z.number().min(0, {
     message: "Duration must be a positive number.",
   }),
-  team_id: z.optional(z.number()).nullable(),
+  team_id: z.number().nullable(),
 });
 
 function EditStrideDialog({
@@ -89,7 +85,6 @@ function EditStrideDialog({
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
   const triggerToast = useTriggerToast();
-
   const form = useForm<EditStrideFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -101,8 +96,6 @@ function EditStrideDialog({
 
   const watchTeamId = form.watch("team_id");
 
-  console.log(watchTeamId);
-  console.log(form.formState.errors);
   const { mutate: updateMutation } = useMutation({
     mutationFn: editStride,
     onSuccess: () => {
@@ -114,16 +107,19 @@ function EditStrideDialog({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("submitting", stride, values);
     if (!jwtToken) {
       throw new Error("Invalid token, unable to update stride");
     }
-    console.log("submitting edit form", {
-      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
-      jwtToken,
-    });
+    // console.log("submitting edit form", {
+    //   strideData: { ...stride, ...values, team_id: Number(values.team_id) },
+    //   jwtToken,
+    // });
     updateMutation({
-      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
+      strideData: {
+        distance: values.distance,
+        duration: values.duration,
+        team_id: Number(values.team_id),
+      },
       jwtToken,
     });
   }
@@ -226,7 +222,7 @@ function EditStrideDialog({
 
 export function MyStridesPage() {
   const { jwtToken, user } = useUser();
-  const { data, isPending } = useFetch<UserStrideData[]>(
+  const { data, isPending } = useFetch<FetchedUserData[]>(
     `/api/strides/${user?.id}`,
     ["fetchMyStrides"],
     {
@@ -236,15 +232,6 @@ export function MyStridesPage() {
   );
 
   console.log(data);
-
-  /* {
-    "id": 260,
-    "created_at": "2024-10-04T16:41:02.598Z",
-    "distance": 10,
-    "address": "109b Bidadari Park Drive",
-    "duration": 3,
-    "team_name": "cat"
-} */
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -307,16 +294,10 @@ export function MyStridesPage() {
             </thead>
             <tbody>
               {data?.map((stride) => (
-                <tr key={stride.id} className="border-t">
+                <tr key={stride.stride_id} className="border-t">
                   <td className="sticky left-0 bg-background px-4 py-3 font-medium ">
-                    {stride.id}
+                    {stride.stride_id}
                   </td>
-                  {/* <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.username}
-                    </td> */}
-                  {/* <td className="px-4 py-3 whitespace-nowrap">
-                      {stride.country}
-                    </td> */}
                   <td className="px-4 py-3 whitespace-nowrap">
                     {stride.address}
                   </td>
@@ -350,9 +331,7 @@ export function MyStridesPage() {
                             })
                           }
                         />
-                        {/* <DropdownMenuItem>Duplicate</DropdownMenuItem> */}
                         <DropdownMenuSeparator />
-                        {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
                         <DropdownMenuItem
                           onClick={() => {
                             handleDelete(stride.stride_id);

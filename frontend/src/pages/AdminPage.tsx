@@ -58,25 +58,30 @@ interface Stride {
   team_id: number | null;
   created_at: string;
 }
+
+interface FetchedAdminData {
+  created_at: string;
+  distance: number;
+  duration: number;
+  team_name: string;
+  stride_id: number;
+  address: string;
+  team_id: number | null;
+  username: string;
+  country: string;
+  team: string;
+}
+
 export type EditStrideFormType = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  country: z.string().min(2, {
-    message: "Country must be at least 2 characters.",
-  }),
   distance: z.number().min(0, {
     message: "Distance must be a positive number.",
   }),
   duration: z.number().min(0, {
     message: "Duration must be a positive number.",
   }),
-  team_id: z.optional(z.nullable(z.number())),
-  //   team: z.string().min(1, {
-  //     message: "Team must be at least 2 characters.",
-  //   }),
+  team_id: z.nullable(z.number()),
 });
 
 function EditStrideDialog({
@@ -94,8 +99,6 @@ function EditStrideDialog({
   const form = useForm<EditStrideFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: stride.username,
-      country: stride.country,
       distance: stride.distance,
       duration: stride.duration,
       team_id: stride.team_id || null,
@@ -152,45 +155,6 @@ function EditStrideDialog({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 md:space-y-8"
           >
-            {/* <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Username" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is the user's display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.username?.message}
-              </div>
-            )} */}
-            {/* <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Country" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.country?.message}
-              </div>
-            )} */}
             <FormField
               control={form.control}
               name="distance"
@@ -255,12 +219,14 @@ function EditStrideDialog({
 }
 
 export function AdminPage() {
-  const { data, isPending } = useFetch("/api/admin", ["fetchAdminData"]);
+  const { data, isPending } = useFetch<FetchedAdminData[]>("/api/admin", [
+    "fetchAdminData",
+  ]);
   console.log(data);
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading, isSuccess, error } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: removeStride,
     onSuccess: () => {
       queryClient.invalidateQueries(
@@ -359,7 +325,6 @@ export function AdminPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-
                         <DropdownMenuGroup>
                           <EditStrideDialog
                             stride={stride}
