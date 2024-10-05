@@ -282,16 +282,20 @@ export function MyStridesPage() {
                 <th className="sticky left-0 bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground">
                   Stride
                 </th>
-                {["Distance (m)", "Duration (mins)", "Team", "Created At"].map(
-                  (header) => (
-                    <th
-                      key={header}
-                      className="bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground whitespace-nowrap"
-                    >
-                      {header}
-                    </th>
-                  )
-                )}
+                {[
+                  "Address",
+                  "Distance (m)",
+                  "Duration (mins)",
+                  "Team",
+                  "Created At",
+                ].map((header) => (
+                  <th
+                    key={header}
+                    className="bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground whitespace-nowrap"
+                  >
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -306,6 +310,9 @@ export function MyStridesPage() {
                   {/* <td className="px-4 py-3 whitespace-nowrap">
                       {stride.country}
                     </td> */}
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.address}
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     {stride.distance}
                   </td>

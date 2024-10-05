@@ -2,6 +2,7 @@ const db = require("../db");
 const { capitalizeFirstLetter } = require("../utils");
 // const Supercluster = require("supercluster");
 const convertToGeoJson = require("../utils/convertToGeoJson");
+const reverseGeocode = require("../utils/reverseGeocode");
 
 async function getStridesByCountry(req, res, next) {
   try {
@@ -68,7 +69,7 @@ async function getCurrTotalStridesStats(req, res, next) {
 
 async function addStride(req, res, next) {
   const { data, location } = req.body;
-  const { id, country_id, username, role, email } = req.me;
+  const { id, country_id } = req.me;
   try {
     // Insert the stride and get the stride_id
     const insertStrideText = ` 
@@ -76,16 +77,22 @@ async function addStride(req, res, next) {
       VALUES ($1, $2, ST_POINT($3, $4), $5, $6, $7, $8)
       RETURNING id
     `;
+    const geoJsonObj = await reverseGeocode({
+      longitude: location.longitude,
+      latitude: location.latitude,
+    });
+    const address = geoJsonObj.features[0].properties.name;
     const strideValues = [
       country_id,
       id,
       location.longitude, // st point
       location.latitude, // st point
-      null, // address
+      address, // address
       10, // distance
       3, // time in minutes
       data.team ? Number(data.team) : null, // team_id
     ];
+
     const result = await db.query(insertStrideText, strideValues);
     const strideId = result.rows[0].id;
     const itemNameMap = {
@@ -96,6 +103,7 @@ async function addStride(req, res, next) {
     // Loop through items in req.body.data
     for (let [itemName, quantity] of Object.entries(data)) {
       if (quantity === 0) continue;
+      if (itemName === "team") continue;
       else {
         itemName = itemNameMap[itemName] || itemName;
         console.log("inserting ", itemName, quantity);
@@ -138,6 +146,7 @@ async function deleteStride(req, res, next) {
 
 async function updateStride(req, res, next) {
   const { strideData } = req.body;
+  console.log("updating stride", strideData);
   const { distance, duration, team_id, strides_id } = strideData;
   try {
     const text = `
@@ -160,9 +169,9 @@ async function getMyStrides(req, res, next) {
   const { userId } = req.params;
   try {
     const text = `
-    SELECT strides.id as id, strides.created_at, strides.distance, strides.time_in_minutes as duration, teams.name as team_name 
+    SELECT strides.id as id, strides.created_at, strides.distance, strides.address, strides.time_in_minutes as duration, teams.name as team_name 
     FROM strides
-    INNER JOIN teams ON teams.id = strides.team_id
+    LEFT JOIN teams ON teams.id = strides.team_id
     WHERE strides.user_id = $1
     ORDER BY strides.created_at DESC;
     `;

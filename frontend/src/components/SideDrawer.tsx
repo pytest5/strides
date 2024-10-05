@@ -63,16 +63,7 @@ export default function SideDrawer({
             >
               Dashboard
             </NavbarLink>
-            {isLoggedIn && (
-              <SheetClose asChild>
-                <NavbarLink
-                  to="/teams"
-                  className={`${!isHorizontal ? "block text-base" : "text-sm"}`}
-                >
-                  Teams
-                </NavbarLink>
-              </SheetClose>
-            )}
+
             {isLoggedIn && (
               <div className={`${isHorizontal ? "relative" : ""}`}>
                 <button

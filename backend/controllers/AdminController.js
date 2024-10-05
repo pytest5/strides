@@ -9,6 +9,7 @@ async function getAdminData(req, res, next) {
         strides.created_at, 
         strides.time_in_minutes as duration, 
         strides.distance, 
+        strides.address,
         strides.user_id,
         users.username,
         users.email,
