@@ -20,7 +20,7 @@ const getData = async <T>(token?: string | undefined): Promise<T> => {
 export function useMyTeams<T>(token?: string | undefined) {
   const { isPending, error, data, isFetching } = useQuery<T>({
     queryKey: ["fetchTeams"],
-    queryFn: () => getData<T>(token),
+    queryFn: (): Promise<T> => getData<T>(token),
   });
   return { isPending, error, data, isFetching };
 }

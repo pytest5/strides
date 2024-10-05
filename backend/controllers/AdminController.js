@@ -5,7 +5,7 @@ async function getAdminData(req, res, next) {
     const text = `
     SELECT 
         countries.name as country, 
-        strides.id as strides_id,
+        strides.id as stride_id,
         strides.created_at, 
         strides.time_in_minutes as duration, 
         strides.distance, 

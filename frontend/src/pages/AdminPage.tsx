@@ -46,14 +46,16 @@ import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import convertDateTime from "@/utils/convertDateTime";
+import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 
 interface Stride {
-  strides_id: number;
+  stride_id: number;
   username: string;
   country: string;
   distance: number;
   duration: number;
   team: string;
+  team_id: number | null;
   created_at: string;
 }
 export type EditStrideFormType = z.infer<typeof formSchema>;
@@ -71,7 +73,7 @@ const formSchema = z.object({
   duration: z.number().min(0, {
     message: "Duration must be a positive number.",
   }),
-  team: z.optional(z.string()),
+  team_id: z.optional(z.nullable(z.number())),
   //   team: z.string().min(1, {
   //     message: "Team must be at least 2 characters.",
   //   }),
@@ -96,13 +98,9 @@ function EditStrideDialog({
       country: stride.country,
       distance: stride.distance,
       duration: stride.duration,
-      team: stride.team,
+      team_id: stride.team_id || null,
     },
   });
-
-  console.log("errors", form.formState.errors);
-
-  const watchTeam = form.watch("team");
 
   const { mutate: updateMutation } = useMutation({
     mutationFn: editStride,
@@ -114,17 +112,26 @@ function EditStrideDialog({
     },
   });
 
+  console.log(form.formState.errors);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("submitting", values);
     if (!jwtToken) {
       throw new Error("Invalid token, unable to update stride");
     }
     console.log("submitting edit form", {
-      strideData: { ...stride, ...values },
+      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
       jwtToken,
     });
-    updateMutation({ strideData: { ...stride, ...values }, jwtToken });
+    updateMutation({
+      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
+      jwtToken,
+    });
   }
+
+  console.log(form.getValues());
+
+  const team_id = form.watch("team_id");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -204,11 +211,6 @@ function EditStrideDialog({
                 </FormItem>
               )}
             />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.distance?.message}
-              </div>
-            )}
             <FormField
               control={form.control}
               name="duration"
@@ -229,42 +231,19 @@ function EditStrideDialog({
                 </FormItem>
               )}
             />
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.duration?.message}
-              </div>
-            )}
             <div className="space-y-2">
               <h2 className="text-sm pb-0 font-semibold text-gray-900 md:pb-4 md:text-xl md:font-bold md:mb-0">
                 Team
               </h2>
               <TeamComboBox
-                value={watchTeam}
-                setValue={(value) => {
-                  console.log("setting value", value);
-                  form.setValue("team", value);
-                }}
                 variant="label"
+                // value={form.getValues().team_id}
+                value={team_id}
+                setValue={(value) => {
+                  form.setValue("team_id", Number(value));
+                }}
               />
             </div>
-            {form.formState.errors && (
-              <div className="text-destructive">
-                {form.formState.errors?.team?.message}
-              </div>
-            )}
-            {/* <FormField
-              control={form.control}
-              name="team"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Team" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <DialogFooter>
               <Button type="submit">Save changes</Button>
             </DialogFooter>
@@ -325,6 +304,7 @@ export function AdminPage() {
                 </th>
                 {[
                   "Name",
+                  "Address",
                   "Country",
                   "Distance (m)",
                   "Duration (mins)",
@@ -343,12 +323,15 @@ export function AdminPage() {
             </thead>
             <tbody className="h-full">
               {data?.map((stride) => (
-                <tr key={stride.strides_id} className="border-t">
+                <tr key={stride.stride_id} className="border-t">
                   <td className="sticky left-0 z-[1] bg-background px-4 py-3 font-medium  ">
-                    {stride.strides_id}
+                    {stride.stride_id}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     {stride.username}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {stride.address}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     {stride.country}
@@ -363,7 +346,7 @@ export function AdminPage() {
                     {stride.team}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    {convertDateTime(stride.created_at, stride.strides_id)}
+                    {convertDateTime(stride.created_at)}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <DropdownMenu>
@@ -375,24 +358,25 @@ export function AdminPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <EditStrideDialog
-                          stride={stride}
-                          onSave={() =>
-                            queryClient.invalidateQueries({
-                              queryKey: ["fetchAdminData"],
-                            })
-                          }
-                        />
-                        {/* <DropdownMenuItem>Duplicate</DropdownMenuItem> */}
                         <DropdownMenuSeparator />
-                        {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
-                        <DropdownMenuItem
-                          onClick={() => {
-                            handleDelete(stride.strides_id);
-                          }}
-                        >
-                          Delete
-                        </DropdownMenuItem>
+
+                        <DropdownMenuGroup>
+                          <EditStrideDialog
+                            stride={stride}
+                            onSave={() =>
+                              queryClient.invalidateQueries({
+                                queryKey: ["fetchAdminData"],
+                              })
+                            }
+                          />
+                          <DropdownMenuItem
+                            onClick={() => {
+                              handleDelete(stride.stride_id);
+                            }}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </td>

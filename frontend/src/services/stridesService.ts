@@ -13,7 +13,6 @@ export const submitStride = async (
   token: TokenType,
   location: Location
 ) => {
-  console.log(token);
   try {
     const response = await fetch("/api/strides", {
       method: "POST",
@@ -28,7 +27,6 @@ export const submitStride = async (
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
     return json;
   } catch (error) {
     if (error instanceof Error) {
@@ -60,7 +58,6 @@ export const removeStride = async ({
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
     return json;
   } catch (error) {
     if (error instanceof Error) {
@@ -76,7 +73,6 @@ interface EditStrideProps {
 }
 
 export const editStride = async ({ strideData, jwtToken }: EditStrideProps) => {
-  console.log(strideData);
   try {
     const response = await fetch("/api/strides", {
       method: "PUT",
@@ -90,7 +86,6 @@ export const editStride = async ({ strideData, jwtToken }: EditStrideProps) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
     return json;
   } catch (error) {
     if (error instanceof Error) {

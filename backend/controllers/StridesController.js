@@ -44,10 +44,8 @@ async function getCurrAllStridesLocation(req, res, next) {
 
 async function getTotalStridesStats(req, res, next) {
   try {
-    console.log("getting total strides stats");
     const text = "SELECT * FROM curr_total_strides_stats";
     const data = await db.query(text);
-    console.log("hey", data);
     res.status(200).json(data.rows);
   } catch (e) {
     console.log(e.message);
@@ -57,7 +55,6 @@ async function getTotalStridesStats(req, res, next) {
 
 async function getCurrTotalStridesStats(req, res, next) {
   try {
-    console.log("getting current total strides stats");
     const text = "SELECT * FROM total_strides_stats";
     const data = await db.query(text);
     res.status(200).json(data.rows);
@@ -106,7 +103,6 @@ async function addStride(req, res, next) {
       if (itemName === "team") continue;
       else {
         itemName = itemNameMap[itemName] || itemName;
-        console.log("inserting ", itemName, quantity);
         const insertItemText = `
           INSERT INTO strides_items (item_id, stride_id, quantity, created_at)
           VALUES (
@@ -136,7 +132,6 @@ async function deleteStride(req, res, next) {
     `;
     const values = [strideId];
     const data = await db.query(text, values);
-    console.log(data);
     res.status(200).json(data.rows);
   } catch (e) {
     console.log(e.message);
@@ -146,8 +141,7 @@ async function deleteStride(req, res, next) {
 
 async function updateStride(req, res, next) {
   const { strideData } = req.body;
-  console.log("updating stride", strideData);
-  const { distance, duration, team_id, strides_id } = strideData;
+  const { distance, duration, team_id, stride_id } = strideData;
   try {
     const text = `
     UPDATE strides
@@ -156,7 +150,12 @@ async function updateStride(req, res, next) {
           team_id = $3
     WHERE id = $4;
     `;
-    const values = [distance, duration, team_id, strides_id];
+    const values = [distance, duration, team_id, stride_id];
+    if (values.includes("")) {
+      return res.status(400).json({
+        message: "Unable to update strides. Please check request body.",
+      });
+    }
     const data = await db.query(text, values);
     res.status(200).json({ message: "Updated stride successfully" });
   } catch (e) {
@@ -169,7 +168,7 @@ async function getMyStrides(req, res, next) {
   const { userId } = req.params;
   try {
     const text = `
-    SELECT strides.id as id, strides.created_at, strides.distance, strides.address, strides.time_in_minutes as duration, teams.name as team_name 
+    SELECT strides.id as stride_id, strides.created_at, strides.distance, strides.address, strides.time_in_minutes as duration, teams.id as team_id, teams.name as team_name 
     FROM strides
     LEFT JOIN teams ON teams.id = strides.team_id
     WHERE strides.user_id = $1
@@ -187,20 +186,18 @@ async function getMyStrides(req, res, next) {
 async function getClusters(req, res) {
   try {
     const Supercluster = (await import("supercluster")).default;
-    console.log("zoom", req.body);
     const { zoom, bbox } = req.body;
     const text = `
     SELECT original_strides_id, ST_X(ST_AsText(location)) AS longitude, ST_Y(ST_AsText(location)) AS latitude, address, country FROM curr_strides_location
     `;
     const data = await db.query(text);
     const geoJson = convertToGeoJson(data.rows);
-    console.log("here", geoJson);
+
     const index = new Supercluster({
       radius: 50, // Match Mapbox GL settings
       maxZoom: 14, // Match Mapbox GL maxZoom
     }).load(geoJson.features); //  Load GeoJSON features into Supercluster
     const clusters = index.getClusters(bbox, zoom); // Get clusters for the given bounding box and zoom level
-    console.log("sending back geoJson clusters to frontend: ", clusters);
     res.json({
       // res.json needs to be in this shape as its going into a mapbox <Source
       type: "FeatureCollection",

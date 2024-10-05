@@ -48,12 +48,13 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import convertDateTime from "@/utils/convertDateTime";
 
 interface Stride {
-  strides_id: number;
+  stride_id: number;
   username: string;
   country: string;
   distance: number;
   duration: number;
   team: string;
+  team_id: number | null;
   created_at: string;
 }
 interface UserStrideData {
@@ -62,27 +63,19 @@ interface UserStrideData {
   duration: number; // 3
   id: number; // 220
   team_name: string; // "ele1"
+  stride_id: number;
 }
 
 export type EditStrideFormType = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  country: z.string().min(2, {
-    message: "Country must be at least 2 characters.",
-  }),
   distance: z.number().min(0, {
     message: "Distance must be a positive number.",
   }),
   duration: z.number().min(0, {
     message: "Duration must be a positive number.",
   }),
-  team: z.optional(z.string()),
-  //   team: z.string().min(1, {
-  //     message: "Team must be at least 2 characters.",
-  //   }),
+  team_id: z.optional(z.number()).nullable(),
 });
 
 function EditStrideDialog({
@@ -100,20 +93,20 @@ function EditStrideDialog({
   const form = useForm<EditStrideFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: stride.username,
-      country: stride.country,
       distance: stride.distance,
       duration: stride.duration,
-      team: stride.team,
+      team_id: stride.team_id || null,
     },
   });
 
-  const watchTeam = form.watch("team");
+  const watchTeamId = form.watch("team_id");
 
+  console.log(watchTeamId);
+  console.log(form.formState.errors);
   const { mutate: updateMutation } = useMutation({
     mutationFn: editStride,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["fetchAdminData"] });
+      queryClient.invalidateQueries({ queryKey: ["fetchMyStrides"] });
       onSave();
       triggerToast("submit");
       setOpen(false);
@@ -121,15 +114,18 @@ function EditStrideDialog({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("submitting", values);
+    console.log("submitting", stride, values);
     if (!jwtToken) {
       throw new Error("Invalid token, unable to update stride");
     }
     console.log("submitting edit form", {
-      strideData: { ...stride, ...values },
+      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
       jwtToken,
     });
-    updateMutation({ strideData: { ...stride, ...values }, jwtToken });
+    updateMutation({
+      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
+      jwtToken,
+    });
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -205,10 +201,10 @@ function EditStrideDialog({
                 Team
               </h2>
               <TeamComboBox
-                value={watchTeam}
+                value={watchTeamId}
                 setValue={(value) => {
                   console.log("setting value", value);
-                  form.setValue("team", value);
+                  form.setValue("team_id", Number(value));
                 }}
                 variant="label"
               />
@@ -238,6 +234,17 @@ export function MyStridesPage() {
       enabled: !!user,
     }
   );
+
+  console.log(data);
+
+  /* {
+    "id": 260,
+    "created_at": "2024-10-04T16:41:02.598Z",
+    "distance": 10,
+    "address": "109b Bidadari Park Drive",
+    "duration": 3,
+    "team_name": "cat"
+} */
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -348,7 +355,7 @@ export function MyStridesPage() {
                         {/* <DropdownMenuItem>Archive</DropdownMenuItem> */}
                         <DropdownMenuItem
                           onClick={() => {
-                            handleDelete(stride.strides_id);
+                            handleDelete(stride.stride_id);
                           }}
                         >
                           Delete
