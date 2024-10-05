@@ -20,7 +20,7 @@ import { useUser } from "./UserProvider";
 import { useMyTeams } from "@/hooks/use-my-teams";
 import LoadingSpinner from "./LoadingSpinner";
 
-type ValueType = string | undefined;
+type ValueType = number | null;
 
 interface Props {
   value: ValueType;
@@ -28,17 +28,27 @@ interface Props {
   variant?: "label";
 }
 
-export function TeamComboBox({ value, setValue, variant }: Props) {
+interface Team {
+  value: number;
+  label: string;
+}
+
+interface TeamData {
+  id: number;
+  name: string;
+}
+
+export function TeamComboBox({ value, setValue }: Props) {
   const [open, setOpen] = React.useState(false);
   const { jwtToken } = useUser();
-  const { data, isPending } = useMyTeams(jwtToken);
+  const { data, isPending } = useMyTeams<TeamData[]>(jwtToken);
 
   if (isPending || !data) {
     return <LoadingSpinner />;
   }
 
-  const teams = data.map(({ id, name }) => ({
-    value: id.toString(),
+  const teams: Team[] = data.map(({ id, name }) => ({
+    value: id,
     label: name,
   }));
 
@@ -52,11 +62,7 @@ export function TeamComboBox({ value, setValue, variant }: Props) {
           className="w-[200px] justify-between"
         >
           {value
-            ? teams.find(
-                (team) =>
-                  (variant === "label" ? team.label : team.value.toString()) ===
-                  value
-              )?.label
+            ? teams.find((team) => team.value === Number(value))?.label
             : "Select team..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -70,12 +76,9 @@ export function TeamComboBox({ value, setValue, variant }: Props) {
               {teams?.map((team) => (
                 <CommandItem
                   key={team.value}
-                  value={
-                    variant === "label" ? team.label : team.value.toString()
-                  }
+                  value={team.value.toString()}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    // setValue(currentValue);
+                    setValue(+currentValue === value ? null : +currentValue);
                     setOpen(false);
                   }}
                 >
@@ -83,12 +86,7 @@ export function TeamComboBox({ value, setValue, variant }: Props) {
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value ===
-                        (variant === "label"
-                          ? team.label
-                          : team.value.toString())
-                        ? "opacity-100"
-                        : "opacity-0"
+                      value === team.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

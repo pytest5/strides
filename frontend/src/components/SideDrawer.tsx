@@ -93,12 +93,20 @@ export default function SideDrawer({
                   >
                     <div className="pl-4 py-1">
                       <SheetClose asChild>
-                        <NavbarLink to="/teams/add" className="block text-base">
+                        <NavbarLink
+                          to="/teams/add"
+                          className="block text-base "
+                          onClick={() => setIsTeamsOpen(false)}
+                        >
                           Add Team
                         </NavbarLink>
                       </SheetClose>
                       <SheetClose asChild>
-                        <NavbarLink to="/teams" className="block text-base">
+                        <NavbarLink
+                          to="/teams"
+                          className="block text-base"
+                          onClick={() => setIsTeamsOpen(false)}
+                        >
                           My Teams
                         </NavbarLink>
                       </SheetClose>

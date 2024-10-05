@@ -63,13 +63,17 @@ const wasteCategories = [
   { name: "Others", icon: "/others.png" },
 ];
 
-const defaultValues = {
-  ...wasteCategories.reduce(
-    (a, c) => ({ ...a, [c.name.toLowerCase()]: 0 }),
-    {}
-  ),
-  team: "",
+const getEmptyFormValues = () => {
+  return {
+    ...wasteCategories.reduce(
+      (a, c) => ({ ...a, [c.name.toLowerCase()]: 0 }),
+      {}
+    ),
+    team: "",
+  };
 };
+
+const defaultValues = getEmptyFormValues();
 
 export default function AddStridesPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -104,7 +108,10 @@ export default function AddStridesPage() {
     setError,
     formState: { errors },
     reset,
+    getValues,
   } = form;
+
+  console.log("formVal", getValues());
 
   const onSubmit = (data: AddStrideFormDataType) => {
     const newData = {

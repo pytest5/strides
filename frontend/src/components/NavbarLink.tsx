@@ -1,16 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const NavbarLink = ({
-  to,
-  children,
-  className,
-  onClick,
-}: {
+interface Props {
   to: string;
   children: React.ReactNode;
   className?: string;
-}) => {
+  onClick?: () => void;
+}
+
+export const NavbarLink = ({ to, children, className, onClick }: Props) => {
   return (
     <Link
       to={to}
