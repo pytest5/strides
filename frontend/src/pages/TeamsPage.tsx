@@ -22,13 +22,14 @@ export default function TeamsPage() {
     ["fetchPublicTeams"],
     { token: jwtToken }
   );
+
   const { isPending: isMyTeamsPending, data: myTeams } = useFetch<Team[]>(
     "/api/teams/my",
     ["fetchMyTeams", user?.email],
     { token: jwtToken }
   );
 
-  if (isPending || isMyTeamsPending) {
+  if (!user || isPending || isMyTeamsPending || !jwtToken) {
     return <LoadingSpinner />;
   }
 

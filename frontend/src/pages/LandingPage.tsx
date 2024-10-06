@@ -9,11 +9,11 @@ export default function LandingPage() {
       <main className="flex-1 flex justify-center items-center px-4 md:px-6">
         <div className="flex flex-col items-center gap-y-7 text-center max-w-md">
           <h1 className="text-4xl max-w-[330px] font-extrabold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-            Welcome to Our Platform
+            A Cleaner Way to Move
           </h1>
           <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-            Discover amazing features and insights. Sign up now or explore our
-            public dashboard.
+            Unlitter our world and track the positive impact you’re making with
+            Stridy. Sign up now or explore our public dashboard.
           </p>
           <div className="flex flex-col w-full gap-4 sm:flex-row sm:justify-center">
             {!isLoggedIn ? (
@@ -22,7 +22,7 @@ export default function LandingPage() {
               </Button>
             ) : (
               <Button asChild>
-                <Link to="/strides/add">Add strides</Link>
+                <Link to="/strides/add">Add Stride</Link>
               </Button>
             )}
             <Button variant="outline" asChild>
