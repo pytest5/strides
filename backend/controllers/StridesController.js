@@ -78,6 +78,7 @@ async function addStride(req, res, next) {
       longitude: location.longitude,
       latitude: location.latitude,
     });
+    console.log("geoJsonObj", geoJsonObj);
     const address = geoJsonObj.features[0].properties.name;
     const strideValues = [
       country_id,
