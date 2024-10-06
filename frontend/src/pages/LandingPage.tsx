@@ -18,7 +18,7 @@ export default function LandingPage() {
           <div className="flex flex-col w-full gap-4 sm:flex-row sm:justify-center">
             {!isLoggedIn ? (
               <Button asChild>
-                <Link to="/signup">Get Started</Link>
+                <Link to="/login">Get Started</Link>
               </Button>
             ) : (
               <Button asChild>

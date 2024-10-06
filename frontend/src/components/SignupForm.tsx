@@ -18,6 +18,8 @@ import authService from "@/services/authService";
 import { CountrySelector } from "./CountrySelector";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { capitalizeFirstLetter } from "@/utils";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 
 async function action({ request }: { params?: string; request: Request }) {
   const formData = await request.formData();
@@ -70,12 +72,15 @@ export default function SignupForm() {
 
   console.log(errors);
 
-  const onSubmit: SubmitHandler<FieldTypes> = async (values) => {
+  const userSignUp = async (values) => {
     try {
       const token = await authService.signup(values);
-      localStorage.setItem("jwt", JSON.stringify(token));
+      // localStorage.setItem("jwt", JSON.stringify(token));
       navigate("/");
-      triggerToast("signup", { data: capitalizeFirstLetter(values.username) });
+      triggerToast("signup", {
+        data: capitalizeFirstLetter(values.username),
+        duration: 4000,
+      });
     } catch (e) {
       if (e instanceof Error) {
         if (
@@ -94,6 +99,14 @@ export default function SignupForm() {
         }
       }
     }
+  };
+
+  const mutation = useMutation({
+    mutationFn: userSignUp,
+  });
+
+  const onSubmit: SubmitHandler<FieldTypes> = async (values) => {
+    mutation.mutate(values);
   };
 
   return (
@@ -158,7 +171,14 @@ export default function SignupForm() {
             {errors.root?.signupError.message}
           </div>
         )}
-        <Button type="submit">Submit</Button>
+        {mutation.isPending ? (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        ) : (
+          <Button type="submit">Submit</Button>
+        )}
       </form>
     </Form>
   );

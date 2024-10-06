@@ -18,7 +18,6 @@ import { redirect, useNavigate } from "react-router-dom";
 import authService from "../services/authService.ts";
 import { useUser } from "./UserProvider.tsx";
 import { useTriggerToast } from "@/hooks/use-trigger-toast.ts";
-import fetchCountries from "@/utils/fetchCountries.ts";
 import { useMutation } from "@tanstack/react-query";
 import LoadingSpinner from "./LoadingSpinner.tsx";
 import { Loader2 } from "lucide-react";

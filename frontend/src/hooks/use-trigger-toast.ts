@@ -40,8 +40,10 @@ export const useTriggerToast = () => {
         description: `Welcome back, ${capitalizeFirstLetter(data)}!`,
       },
       signup: {
-        title: "Signed up successfully",
-        description: `Welcome, ${capitalizeFirstLetter(data)}!`,
+        title: "Account Created",
+        description: `Welcome, ${capitalizeFirstLetter(
+          data
+        )}! Please sign in to start using your account.`,
       },
       submit: {
         title: "Submitted successfully",
