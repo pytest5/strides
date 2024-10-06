@@ -46,11 +46,13 @@ import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import convertDateTime from "@/utils/convertDateTime";
+import { useMyTeams } from "@/hooks/use-my-teams";
 
 interface Stride {
   distance: number;
   duration: number;
   team_id: number | null;
+  stride_id: number;
 }
 interface FetchedUserData {
   created_at: string;
@@ -81,9 +83,9 @@ function EditStrideDialog({
   stride: Stride;
   onSave: () => void;
 }) {
+  const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
   const { jwtToken } = useUser();
-  const queryClient = useQueryClient();
   const triggerToast = useTriggerToast();
   const form = useForm<EditStrideFormType>({
     resolver: zodResolver(formSchema),
@@ -110,15 +112,12 @@ function EditStrideDialog({
     if (!jwtToken) {
       throw new Error("Invalid token, unable to update stride");
     }
-    // console.log("submitting edit form", {
-    //   strideData: { ...stride, ...values, team_id: Number(values.team_id) },
-    //   jwtToken,
-    // });
     updateMutation({
       strideData: {
         distance: values.distance,
         duration: values.duration,
         team_id: Number(values.team_id),
+        stride_id: stride.stride_id,
       },
       jwtToken,
     });
@@ -202,7 +201,7 @@ function EditStrideDialog({
                   console.log("setting value", value);
                   form.setValue("team_id", Number(value));
                 }}
-                variant="label"
+                fetchTeamFn={useMyTeams}
               />
             </div>
             {form.formState.errors && (
@@ -230,16 +229,13 @@ export function MyStridesPage() {
       enabled: !!user,
     }
   );
-
-  console.log(data);
-
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: removeStride,
     onSuccess: () => {
       queryClient.invalidateQueries(
         {
-          queryKey: ["fetchAdminData"],
+          queryKey: ["fetchMyStrides"],
           exact: true,
           refetchType: "active",
         },
