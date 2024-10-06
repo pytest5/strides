@@ -151,7 +151,8 @@ async function updateStride(req, res, next) {
     WHERE id = $4;
     `;
     const values = [distance, duration, team_id, stride_id];
-    if (values.includes("")) {
+    console.log(values);
+    if (values.includes(undefined)) {
       return res.status(400).json({
         message: "Unable to update strides. Please check request body.",
       });
