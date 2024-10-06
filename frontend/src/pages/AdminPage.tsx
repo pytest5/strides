@@ -47,6 +47,7 @@ import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import convertDateTime from "@/utils/convertDateTime";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
+import { useAllTeams } from "@/hooks/use-all-teams";
 
 interface Stride {
   stride_id: number;
@@ -132,8 +133,6 @@ function EditStrideDialog({
     });
   }
 
-  console.log(form.getValues());
-
   const team_id = form.watch("team_id");
 
   return (
@@ -200,12 +199,12 @@ function EditStrideDialog({
                 Team
               </h2>
               <TeamComboBox
-                variant="label"
                 // value={form.getValues().team_id}
                 value={team_id}
                 setValue={(value) => {
                   form.setValue("team_id", Number(value));
                 }}
+                fetchTeamFn={useAllTeams}
               />
             </div>
             <DialogFooter>
