@@ -16,9 +16,11 @@ import {
 import { UserAvatar } from "./UserAvatar.js";
 import { AdminBadge } from "./AdminBadge.js";
 import { HorizontalNavbarLinks } from "./HorizontalNavbarLinks.js";
+import { useTriggerToast } from "@/hooks/use-trigger-toast.js";
 
 export default function Navbar() {
-  const { user, isLoggedIn } = useUser();
+  const { user, isLoggedIn, logout } = useUser();
+  const triggerToast = useTriggerToast();
 
   return (
     <nav className="shadow-sm py-3  ">
@@ -79,7 +81,14 @@ export default function Navbar() {
                   <Link to=''>Settings</Link>
                 </DropdownMenuItem> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => ""}>Logout</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    logout();
+                    triggerToast("logout");
+                  }}
+                >
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}

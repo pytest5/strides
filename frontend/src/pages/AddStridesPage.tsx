@@ -40,7 +40,7 @@ const formSchema = z
     tissue: z.number().min(0),
     cigarette: z.number().min(0),
     others: z.number().min(0),
-    team: z.optional(z.string()),
+    team: z.optional(z.number()),
   })
   .refine((data) => Object.values(data).some((value) => value !== 0), {
     message: "Please select at least one item.",

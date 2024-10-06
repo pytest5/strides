@@ -16,6 +16,7 @@ import { AdminBadge } from "./AdminBadge";
 import { NavbarLink } from "./NavbarLink";
 import { ChevronDown } from "lucide-react";
 import React from "react";
+import { capitalizeFirstLetter } from "@/utils";
 
 export default function SideDrawer({
   trigger,
@@ -186,7 +187,7 @@ export default function SideDrawer({
               </Link>
               <div className="ml-3 ">
                 <div className="text-base font-medium text-gray-800">
-                  {user?.username} <AdminBadge />
+                  {capitalizeFirstLetter(user?.username)} <AdminBadge />
                 </div>
                 <div className="text-sm font-medium text-gray-500">
                   {user?.email}
@@ -204,7 +205,7 @@ export default function SideDrawer({
                   logout();
                 }
               }}
-              className={`px-3 py-2 rounded-md font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out text-base`}
+              className={`mt-4 px-3 py-2 rounded-md font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-200 transition duration-150 ease-in-out text-base`}
             >
               {isLoggedIn ? "Logout" : "Login"}
             </div>
