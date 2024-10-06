@@ -17,7 +17,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUser } from "./UserProvider";
-import { useMyTeams } from "@/hooks/use-my-teams";
 import LoadingSpinner from "./LoadingSpinner";
 
 type ValueType = number | null;
@@ -25,7 +24,7 @@ type ValueType = number | null;
 interface Props {
   value: ValueType;
   setValue: (value: ValueType) => void;
-  variant?: "label";
+  fetchTeamFn: (token: string) => FnReturnProps;
 }
 
 interface Team {
@@ -34,24 +33,30 @@ interface Team {
 }
 
 interface TeamData {
-  id: number;
-  name: string;
+  team_id: number;
+  team_name: string;
 }
 
-export function TeamComboBox({ value, setValue }: Props) {
+interface FnReturnProps {
+  data: TeamData[] | undefined;
+  isPending: boolean;
+  error: Error | null;
+  isFetching: boolean;
+}
+
+export function TeamComboBox({ value, setValue, fetchTeamFn }: Props) {
   const [open, setOpen] = React.useState(false);
   const { jwtToken } = useUser();
-  const { data, isPending } = useMyTeams<TeamData[]>(jwtToken);
+  const { data, isPending } = fetchTeamFn(jwtToken);
 
   if (isPending || !data) {
     return <LoadingSpinner />;
   }
 
-  const teams: Team[] = data.map(({ id, name }) => ({
-    value: id,
-    label: name,
+  const teams: Team[] = data?.map(({ team_id, team_name }) => ({
+    value: team_id,
+    label: team_name,
   }));
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -76,9 +81,15 @@ export function TeamComboBox({ value, setValue }: Props) {
               {teams?.map((team) => (
                 <CommandItem
                   key={team.value}
-                  value={team.value.toString()}
+                  // value={team.value?.toString()}
+                  value={team.label?.toLowerCase()}
                   onSelect={(currentValue) => {
-                    setValue(+currentValue === value ? null : +currentValue);
+                    // setValue(+currentValue === value ? null : +currentValue);
+                    const selectedTeam = teams.find(
+                      (team) =>
+                        team.label?.toLowerCase() === currentValue.toLowerCase()
+                    );
+                    setValue(selectedTeam ? selectedTeam.value : null); // Store team ID in `setValue
                     setOpen(false);
                   }}
                 >

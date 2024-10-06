@@ -62,8 +62,8 @@ export const TeamTable = ({ teams, isPublic }: Props) => {
         </TableHeader>
         <TableBody className="">
           {teams?.map((team) => (
-            <TableRow key={`${team.id}-${isPublic}`}>
-              <TableCell className="font-medium">{team.name}</TableCell>
+            <TableRow key={`${team.team_id}-${isPublic}`}>
+              <TableCell className="font-medium">{team.team_name}</TableCell>
               <TableCell>{team.location}</TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -75,12 +75,14 @@ export const TeamTable = ({ teams, isPublic }: Props) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     {isPublic ? (
-                      <DropdownMenuItem onClick={handleJoinTeam(team.id)}>
+                      <DropdownMenuItem onClick={handleJoinTeam(team.team_id)}>
                         Join Team
                       </DropdownMenuItem>
                     ) : (
                       <>
-                        <DropdownMenuItem onClick={handleLeaveTeam(team.id)}>
+                        <DropdownMenuItem
+                          onClick={handleLeaveTeam(team.team_id)}
+                        >
                           Leave Team
                         </DropdownMenuItem>
                       </>
