@@ -24,6 +24,7 @@ import { TeamComboBox } from "@/components/TeamComboBox";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useMyTeams } from "@/hooks/use-my-teams";
 
 export type AddStrideFormDataType = z.infer<typeof formSchema>;
 
@@ -108,17 +109,13 @@ export default function AddStridesPage() {
     setError,
     formState: { errors },
     reset,
-    getValues,
   } = form;
-
-  console.log("formVal", getValues());
 
   const onSubmit = (data: AddStrideFormDataType) => {
     const newData = {
       ...data,
       team: watchTeam,
     };
-    console.log("submitting", newData);
     if (Object.values(data).every((value) => value === 0)) {
       console.log("Form is empty, preventing submission");
       return;
@@ -139,8 +136,6 @@ export default function AddStridesPage() {
 
   const watchTeam = watch("team"); // Watch team selection
   const watchAllFields = watch();
-
-  console.log(watchAllFields);
 
   const totalItems = Object.values(watchAllFields)
     .filter((value) => typeof value === "number")
@@ -235,7 +230,7 @@ export default function AddStridesPage() {
                               {typeof field.value === "number" &&
                                 field.value > 0 && (
                                   <Badge
-                                    className="absolute top-1 right-1 bg-slate-700"
+                                    className="absolute top-1 right-1 bg-primary"
                                     variant="default"
                                   >
                                     {field.value}
@@ -333,6 +328,7 @@ export default function AddStridesPage() {
               <TeamComboBox
                 value={watchTeam}
                 setValue={(value) => setValue("team", value)}
+                fetchTeamFn={useMyTeams}
               />
               {/* Actions segment */}
             </div>

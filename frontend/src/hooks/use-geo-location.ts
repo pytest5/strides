@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTriggerToast } from "./use-trigger-toast";
 import { Location } from "@/services/stridesService";
+import reverseGeocode from "@/utils/reverseGeocode";
 
 export function useGeoLocation() {
   const [location, setLocation] = useState<Location | null>();
@@ -19,13 +20,13 @@ export function useGeoLocation() {
       return;
     }
 
-    function handleSuccess(position: GeolocationPosition) {
+    async function handleSuccess(position: GeolocationPosition) {
       const { latitude, longitude } = position.coords;
-      setLocation({ latitude, longitude });
+      const address = await reverseGeocode({ latitude, longitude });
       triggerToast("locationObtained", {
-        data: JSON.stringify({ latitude, longitude }, null, 4),
+        data: address,
       });
-      console.log("Triggering toast now");
+      setLocation({ latitude, longitude });
     }
 
     function handleError(error: GeolocationPositionError) {
@@ -54,7 +55,7 @@ export function useGeoLocation() {
         triggerToast("locationDenied", { type: "destructive" });
       } else if (res.state === "granted") {
         setIsLocationGranted(true);
-        triggerToast("gettingLocation");
+        // triggerToast("gettingLocation");
         navigator.geolocation.getCurrentPosition(
           handleSuccess,
           handleError,

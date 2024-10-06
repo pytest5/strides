@@ -23,7 +23,7 @@ interface Messages {
 
 interface Options {
   type?: "destructive";
-  data?: string;
+  data?: string | { latitude: number; longitude: number };
   duration?: number;
 }
 
@@ -65,7 +65,7 @@ export const useTriggerToast = () => {
       },
       locationObtained: {
         title: "Location obtained",
-        description: `Current location: ${data}`,
+        description: `${data}`,
       },
       locationNotSupported: {
         title: "Location not supported",
