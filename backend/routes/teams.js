@@ -28,19 +28,16 @@ router.post("/", async (req, res) => {
 
 // get all teams info for admin
 router.get("/admin", checkIsAdmin, async (req, res) => {
+  console.log(console.log("accessing admin data"));
   try {
     const text = `
-    SELECT teams.name as team_name, teams.country_id as country_id, teams.ispublic, teams.created_at, users.username 
+    SELECT teams.id as team_id, teams.name as team_name
     FROM teams 
-    INNER JOIN users_teams
-    ON teams.id = users_teams.team_id
-    INNER JOIN users
-    ON users_teams.user_id = users.id
     ORDER BY teams.created_at DESC;
     `;
     const values = [];
     const result = await db.query(text, values);
-    res.status(200).json(result.rows[0]);
+    res.status(200).json(result.rows);
   } catch (e) {
     console.log(e, e.message);
     res.status(500).json({ error: "Unable to retrieve teams" });
@@ -51,7 +48,7 @@ router.get("/admin", checkIsAdmin, async (req, res) => {
 router.get("/public", async (req, res) => {
   try {
     const text = `
-    SELECT * FROM TEAMS WHERE ispublic = TRUE
+    SELECT teams.id as team_id, teams.name as team_name, teams.ispublic as ispublic, teams.created_at as teams_created_at FROM TEAMS WHERE ispublic = TRUE
     ORDER BY teams.created_at DESC;    
     `;
     const values = [];
@@ -97,20 +94,19 @@ router.get("/my", async (req, res) => {
   try {
     const { id } = req.me;
     const text = `
-    SELECT teams.id as id, teams.name as name, teams.country_id as country_id, teams.ispublic, teams.created_at
+    SELECT teams.id as team_id, teams.name as team_name, teams.country_id as country_id, teams.ispublic, teams.created_at
     FROM teams 
     INNER JOIN users_teams
     ON teams.id = users_teams.team_id
     WHERE users_teams.user_id = $1
     ORDER BY teams.created_at DESC;
 `;
-
     const values = [id];
     const result = await db.query(text, values);
     res.status(200).json(result.rows);
   } catch (e) {
     console.log(e, e.message);
-    res.status(500).json({ error: "Unable to create team" });
+    res.status(500).json({ error: "Unable to fetch my teams" });
   }
 });
 
@@ -134,7 +130,6 @@ router.delete("/:teamId", async (req, res) => {
   try {
     const { id } = req.me;
     const { teamId } = req.params;
-    console.log("here", req.params);
     const text = `
      DELETE FROM users_teams 
      WHERE user_id = $1
