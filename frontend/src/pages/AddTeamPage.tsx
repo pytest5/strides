@@ -19,7 +19,7 @@ import { useUser } from "@/components/UserProvider";
 import { submitTeam } from "@/services/teamService";
 import { useTriggerToast } from "@/hooks/use-trigger-toast";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { Loader2 } from "lucide-react";
 
 export type AddTeamFormType = z.infer<typeof formSchema>;
 
@@ -91,10 +91,6 @@ export default function AddTeamPage() {
     });
   }
 
-  if (mutation.isPending) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <div className="container mx-auto p-4 space-y-8 max-w-[600px]">
       <Card>
@@ -140,9 +136,16 @@ export default function AddTeamPage() {
                 <Button type="submit" variant="outline" asChild>
                   <Link to="/teams">Back</Link>
                 </Button>
-                <Button type="submit" className="ml-auto">
-                  Add Team
-                </Button>
+                {mutation.isPending ? (
+                  <Button disabled className="ml-auto">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </Button>
+                ) : (
+                  <Button type="submit" className="ml-auto">
+                    Add Team
+                  </Button>
+                )}
               </div>
               {form.formState?.errors?.root && (
                 <div className="text-sm text-destructive">

@@ -2,13 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Minus, Plus } from "lucide-react";
+import { Loader2, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+
 import {
   Form,
   FormControl,
@@ -149,10 +150,6 @@ export default function AddStridesPage() {
     setValue(lowerCaseCategory, Number(currentValue) + 1);
     setSelectedCategory(lowerCaseCategory);
   };
-
-  if (mutation.isPending) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="flex flex-col md:flex-row bg-gray-100 text-foreground h-full ">
@@ -341,13 +338,16 @@ export default function AddStridesPage() {
               >
                 <Link to="/">End Stride</Link>
               </Button>
-              <Button
-                type="submit"
-                className="flex-1"
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending ? "Saving..." : "Save Pickup"}
-              </Button>
+              {mutation.isPending ? (
+                <Button disabled className="flex-1">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button type="submit" className="flex-1">
+                  Save Pickup
+                </Button>
+              )}
             </div>
           </form>
         </Form>

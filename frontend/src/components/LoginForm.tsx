@@ -135,7 +135,7 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        {form.formState.isSubmitting ? (
+        {mutation.isPending ? (
           <Button disabled>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
