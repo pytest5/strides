@@ -53,6 +53,7 @@ type Props = {
 };
 
 export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
+  console.log("fetching clusters in frontend");
   const fetchClusters = async () => {
     const url = "/api/strides/clusters";
     try {
