@@ -70,7 +70,10 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
       }
       ref.current.flyTo({
         center: feature.geometry.coordinates,
-        zoom: viewState.zoom < 9 ? viewState.zoom + 4 : viewState.zoom + 1,
+        zoom:
+          viewState.zoom < 9
+            ? Math.min(viewState.zoom + 4, 9)
+            : viewState.zoom + 1, // Cap zoom at 9 if it's below 9, then increment by 1
         duration: 1200,
       });
     } else {
