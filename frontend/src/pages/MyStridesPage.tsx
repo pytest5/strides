@@ -198,7 +198,6 @@ function EditStrideDialog({
               <TeamComboBox
                 value={watchTeamId}
                 setValue={(value) => {
-                  console.log("setting value", value);
                   form.setValue("team_id", Number(value));
                 }}
                 fetchTeamFn={useMyTeams}

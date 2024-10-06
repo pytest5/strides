@@ -8,7 +8,6 @@ function getAllUsers(params) {}
 
 async function userSignup(req, res, next) {
   const { username, password, email, country: country_id } = req.body;
-  console.log("req body: ", req.body);
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   let role = "user";

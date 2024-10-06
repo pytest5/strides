@@ -20,8 +20,6 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
   });
   const initialLoadRef = React.useRef(true);
 
-  console.log("current zoom ", viewState.zoom);
-
   React.useEffect(() => {
     const location = getUserLocation();
     if (location) {
@@ -97,7 +95,6 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
     });
     if (ref.current) {
       const bounds = ref.current.getBounds().toArray().flat();
-      console.log(bounds);
       setBbox(bounds);
     }
   };
@@ -112,8 +109,6 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
     ),
     [viewState.zoom, bbox]
   );
-
-  console.log("bbox", bbox);
 
   // if (!bbox) return <LoadingSpinner></LoadingSpinner>;
 
@@ -134,19 +129,6 @@ const StridesMap = React.forwardRef<MapRef>((props, ref: React.Ref<MapRef>) => {
         interactiveLayerIds={[clusterLayer.id, unclusteredPointLayer.id]}
         ref={ref}
         onMoveEnd={onMoveEnd}
-        // onMoveEnd={(e) => {
-        //   setViewState({
-        //     ...viewState,
-        //     longitude: e.viewState.longitude,
-        //     latitude: e.viewState.latitude,
-        //     zoom: e.viewState.zoom,
-        //   });
-        //   if (ref.current) {
-        //     const bounds = ref.current.getBounds().toArray().flat();
-        //     console.log(bounds);
-        //     setBbox(bounds);
-        //   }
-        // }}
       >
         {bbox && memoizedMapLayers}
       </Map>

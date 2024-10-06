@@ -42,7 +42,6 @@ export function useGeoLocation() {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API/Using_the_Permissions_API
     navigator.permissions.query({ name: "geolocation" }).then((res) => {
-      console.log(res.state);
       if (res.state === "prompt") {
         navigator.geolocation.getCurrentPosition(
           handleSuccess,

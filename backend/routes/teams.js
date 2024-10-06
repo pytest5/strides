@@ -71,7 +71,6 @@ router.post("/join", async (req, res) => {
     `;
     const checkValues = [id, teamId];
     const checkResult = await db.query(checkText, checkValues);
-    console.log(checkResult.rows);
     const isAlreadyInTeam = checkResult.rows.length === 1;
     if (isAlreadyInTeam) {
       return res.status(404).json({ error: "Already in team" });

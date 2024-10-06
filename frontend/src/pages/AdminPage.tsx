@@ -116,17 +116,10 @@ function EditStrideDialog({
     },
   });
 
-  console.log(form.formState.errors);
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("submitting", values);
     if (!jwtToken) {
       throw new Error("Invalid token, unable to update stride");
     }
-    console.log("submitting edit form", {
-      strideData: { ...stride, ...values, team_id: Number(values.team_id) },
-      jwtToken,
-    });
     updateMutation({
       strideData: { ...stride, ...values, team_id: Number(values.team_id) },
       jwtToken,
@@ -221,7 +214,6 @@ export function AdminPage() {
   const { data, isPending } = useFetch<FetchedAdminData[]>("/api/admin", [
     "fetchAdminData",
   ]);
-  console.log(data);
   const { jwtToken } = useUser();
   const queryClient = useQueryClient();
 

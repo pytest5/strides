@@ -76,7 +76,6 @@ export default function LoginForm() {
     },
     onSuccess: (data) => {
       const jwt = data;
-      console.log(jwt);
       localStorage.setItem("jwt", jwt);
       const user = JSON.parse(atob(jwt.split(".")[1]));
       const { role } = user;

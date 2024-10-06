@@ -92,7 +92,6 @@ export default function AddTeamPage() {
   }
 
   if (mutation.isPending) {
-    console.log("pending");
     return <LoadingSpinner />;
   }
 

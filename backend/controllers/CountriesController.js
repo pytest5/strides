@@ -6,7 +6,6 @@ async function getAllCountries(req, res, next) {
     SELECT * FROM countries
     `;
     const data = await db.query(text);
-    console.log(data);
     res.status(200).json(data.rows);
   } catch (e) {
     console.log(e.message);

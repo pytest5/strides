@@ -6,7 +6,6 @@ import { AddTeamFormType } from "@/pages/AddTeamPage";
 // } | null;
 
 export const submitTeam = async (formData: AddTeamFormType, token: string) => {
-  console.log(formData, token);
   try {
     const response = await fetch("/api/teams", {
       method: "POST",
@@ -21,7 +20,6 @@ export const submitTeam = async (formData: AddTeamFormType, token: string) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
     return json;
   } catch (error) {
     if (error instanceof Error) {
@@ -46,7 +44,6 @@ export const joinTeam = async (teamId: number, token: string) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
     return json;
   } catch (error) {
     if (error instanceof Error) {
@@ -80,6 +77,6 @@ export const leaveTeam = async (teamId: number, token: string) => {
     if (error instanceof Error) {
       console.error("Error leaving team", error.message);
     }
-    throw new Error(`Unknown error occurred ${error.message}`);
+    throw new Error(`Unknown error occurred ${error}`);
   }
 };

@@ -55,7 +55,6 @@ type Props = {
 export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
   const fetchClusters = async () => {
     const url = "/api/strides/clusters";
-    console.log("fetching cluster body", { zoom, bbox });
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -68,8 +67,6 @@ export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
-
-      console.log("fetched clusters data", json);
       return json;
     } catch (error) {
       if (error instanceof Error) {

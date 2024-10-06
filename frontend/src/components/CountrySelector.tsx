@@ -88,7 +88,6 @@ export const CountrySelector = ({ field, form }: Props) => {
                     key={country.value}
                     onSelect={() => {
                       form.setValue("country", country.value);
-                      console.log(form.getValues()); // Check if the country is updated
                     }}
                   >
                     <Check
