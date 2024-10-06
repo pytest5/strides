@@ -129,7 +129,7 @@ export default function SideDrawer({
             {isLoggedIn && (
               <div className={`${isHorizontal ? "relative" : ""}`}>
                 <button
-                  onClick={() => setisTeamsOpen(!isStridesOpen)}
+                  onClick={() => setIsStridesOpen(!isStridesOpen)}
                   className={`${
                     isHorizontal ? horizontalStyles : verticalStyles
                   }`}
