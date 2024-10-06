@@ -6,7 +6,7 @@ interface Options {
   };
 }
 
-const getData = async <T>(token?: string | undefined): Promise<T> => {
+const getData = async <T>(token: string): Promise<T> => {
   const options: Options = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -17,9 +17,9 @@ const getData = async <T>(token?: string | undefined): Promise<T> => {
   return await res.json();
 };
 
-export function useMyTeams<T>(token?: string | undefined) {
+export function useMyTeams<T>(token: string) {
   const { isPending, error, data, isFetching } = useQuery<T>({
-    queryKey: ["fetchTeams"],
+    queryKey: ["fetchMyTeams"],
     queryFn: (): Promise<T> => getData<T>(token),
   });
   return { isPending, error, data, isFetching };
