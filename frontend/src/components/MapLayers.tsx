@@ -68,6 +68,7 @@ export const MapLayers = ({ zoom = 14, bbox, isInitialLoad }: Props) => {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
+      console.log("received clusters in client..");
       return json;
     } catch (error) {
       if (error instanceof Error) {
