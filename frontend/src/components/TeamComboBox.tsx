@@ -78,7 +78,7 @@ export function TeamComboBox({ value, setValue, fetchTeamFn }: Props) {
       >
         <Command>
           <CommandInput
-            autoFocus={false}
+            // autoFocus={false}
             placeholder="Search team..."
             className="h-9"
           />
