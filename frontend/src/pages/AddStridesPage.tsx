@@ -155,7 +155,7 @@ export default function AddStridesPage() {
     <div className="flex flex-col md:flex-row bg-gray-100 text-foreground h-full ">
       {/* Strides Summary */}
       <aside className="grid sm:flex p-5 py-0 sm:flex-col w-full md:w-56 md:p-6 md:pt-9 border-r ">
-        <h2 className="text-sm font-semibold text-gray-900 pb-4 md:text-center ">
+        <h2 className="text-sm font-semibold text-gray-900 pb-2 md:text-center ">
           Current Stride Summary
         </h2>
         {/* Points / Items / Time / Dist */}
@@ -182,13 +182,13 @@ export default function AddStridesPage() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-full p-4 pt-0 md:py-6 md:px-8 overflow-hidden ">
+      <main className="flex-1 flex flex-col h-full p-4 pt-0 md:py-6 md:px-8 overflow-auto">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4 h-full "
           >
-            <div className="flex-1 overflow-auto ">
+            <div className="flex-1  ">
               {/* Current stride */}
               <h1 className="text-sm pt-2 py-3 font-semibold text-gray-900  md:text-3xl md:font-bold md:mb-2 md:border-b">
                 Current Stride

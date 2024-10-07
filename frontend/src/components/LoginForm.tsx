@@ -141,7 +141,7 @@ export default function LoginForm() {
             Please wait
           </Button>
         ) : (
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Login</Button>
         )}
         {errors.root && (
           <div className="text-destructive font-medium text-[0.8rem]">

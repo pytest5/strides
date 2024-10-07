@@ -177,7 +177,7 @@ export default function SignupForm() {
             Please wait
           </Button>
         ) : (
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Create Account</Button>
         )}
       </form>
     </Form>
