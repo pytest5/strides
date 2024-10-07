@@ -74,7 +74,11 @@ export function TeamComboBox({ value, setValue, fetchTeamFn }: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search team..." className="h-9" />
+          <CommandInput
+            autoFocus={false}
+            placeholder="Search team..."
+            className="h-9"
+          />
           <CommandList>
             <CommandEmpty>No team found.</CommandEmpty>
             <CommandGroup>
