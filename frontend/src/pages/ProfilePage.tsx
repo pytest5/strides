@@ -14,10 +14,10 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 const sidebarItems = [
   "Profile",
-  "Account",
-  "Appearance",
-  "Notifications",
-  "Display",
+  // "Account",
+  // "Appearance",
+  // "Notifications",å
+  // "Display",
 ];
 
 export default function ProfilePage() {
@@ -126,7 +126,7 @@ export default function ProfilePage() {
                 <p className="text-sm text-muted-foreground mt-1">Your bio.</p>
               </div>
             </div>
-            <Button>Update profile</Button>
+            {/* <Button>Update profile</Button> */}
           </main>
         </div>
       </div>
@@ -155,7 +155,7 @@ export default function ProfilePage() {
             <div className="row-span-1">{user?.email}</div>
           </div>
 
-          <section className="mb-6">
+          {/* <section className="mb-6">
             <h3 className="text-sm font-medium text-muted-foreground mb-2">
               Account Settings
             </h3>
@@ -171,10 +171,10 @@ export default function ProfilePage() {
               text="Add a payment method"
               icon={<Plus className="h-5 w-5" />}
             />
-          </section>
+          </section> */}
 
           <section>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+            {/* <h3 className="text-sm font-medium text-muted-foreground mb-2">
               More
             </h3>
             <SettingsItem
@@ -184,7 +184,7 @@ export default function ProfilePage() {
             <SettingsItem
               text="Privacy policy"
               icon={<ChevronRight className="h-5 w-5" />}
-            />
+            /> */}
             <DialogLogoutButton
               className="pl-0 border-none w-full shadow-none justify-start"
               text="Logout"
