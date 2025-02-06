@@ -13,20 +13,25 @@
 ## Screenshots
 
 ### Landing Page
+
 ![Landing Page](url/to/your/screenshot)
 
 ### Strides Map
+
 ![Strides Map](url/to/your/screenshot)
 
 ### Leaderboard
+
 ![Leaderboard](url/to/your/screenshot)
 
 ### Strides Table
+
 ![Strides Table](url/to/your/screenshot)
 
 ## Tech Stack
 
 ### Frontend
+
 - **React**: UI Framework
 - **Tailwind CSS**: For styling and UI design
 - **React Hook Form**: For form handling and validation
@@ -36,6 +41,7 @@
 - **Radix UI**: Accessible UI components
 
 ### Backend
+
 - **Node.js**: JavaScript runtime
 - **Express.js**: Backend framework
 - **PostgreSQL**: Relational database for storing user and strides data
@@ -45,13 +51,16 @@
 
 ## Installation and Setup
 
+### Deployment details
+
 ### Prerequisites
+
 - Node.js and npm installed
 - PostgreSQL installed and running
 - Mapbox API Key (for geospatial data visualization)
 
 ### Usage
+
 Adding Strides: Users can log their strides, including the types of waste collected, distance, and time.
 Viewing Strides: All collected data is displayed on a map, with the ability to filter by date, team, and location.
 Managing Data: Admins can view and manage all user data, teams, and strides.
-
