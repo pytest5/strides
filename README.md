@@ -1,6 +1,29 @@
-# Strides Platform
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="./frontend/public/icon.png" alt="Logo" width="80" height="80">
+  </a>
 
-**Strides** is a platform designed to help individuals and teams track their environmental efforts, specifically by measuring how much waste they collect during strides (walks or cleanup events). The platform visualizes the impact through various charts, maps, and leaderboards, empowering users to see the real-world effects of their contributions.
+  <h3 align="center">Stridy MVP</h3>
+
+  <p align="center">
+    Stridy is a platform that helps individuals and teams <b>track their environmental contributions<> by measuring the waste they collect during cleanup activities.  
+    <br />
+    <a href="https://github.com/pytest5/strides"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    &middot;
+    <a href="https://github.com/pytest5/strides/issues/new?template=Blank+issue">Report Bug</a>
+    &middot;
+    <a href="https://github.com/pytest5/strides/issues/new?labels=enhancement&template=feature-request---">Request Feature</a>
+  </p>
+</div>
+
+# Stridy MVP
+
+**Stridy MVP** is a platform designed to help individuals and teams **track, visualize, and optimize their environmental impact**. It enables users to log waste collection activities (strides), track progress through interactive maps, and analyze contributions over time via leaderboards and analytics.
+
+This platform was originally built as an **MVP for a non-profit organization** to explore how data visualization and tracking can empower environmental efforts. Following the MVP, the organization engaged a full-stack developer to further enhance their platform.
 
 ## Features
 
@@ -14,19 +37,19 @@
 
 ### Landing Page
 
-![Landing Page](url/to/your/screenshot)
+![Landing Page](./frontend/public/stridy_landing.jpg)
 
 ### Strides Map
 
-![Strides Map](url/to/your/screenshot)
+![Strides Map](./frontend/public/stridy_map.png)
 
-### Leaderboard
+### Data visualization
 
-![Leaderboard](url/to/your/screenshot)
+![Data visualization](./frontend/public/stridy_data.png)
 
-### Strides Table
+### Strides Input Form
 
-![Strides Table](url/to/your/screenshot)
+![Strides Table](./frontend/public/stridy_input_form.png)
 
 ## Tech Stack
 
@@ -53,6 +76,10 @@
 
 ### Deployment details
 
+- **Frontend**: Deployed as a static site on Render
+- **Backend**: Deployed as a Node.js service on Render
+- **Database**: PostgreSQL hosted on Render with automated backups
+
 ### Prerequisites
 
 - Node.js and npm installed
@@ -61,6 +88,6 @@
 
 ### Usage
 
-Adding Strides: Users can log their strides, including the types of waste collected, distance, and time.
-Viewing Strides: All collected data is displayed on a map, with the ability to filter by date, team, and location.
-Managing Data: Admins can view and manage all user data, teams, and strides.
+- Adding Strides: Users can log their strides, including the types of waste collected, distance, and time.
+- Viewing Strides: All collected data is displayed on a map, with the ability to filter by date, team, and location.
+- Managing Data: Admins can view and manage all user data, teams, and strides.

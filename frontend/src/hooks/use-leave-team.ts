@@ -20,7 +20,7 @@ export function useLeaveTeam<T>(token?: string | undefined) {
       triggerToast("alreadyInTeam", { type: "destructive" });
     },
     onSuccess: (data, variables, context) => {
-      triggerToast("submit");
+      triggerToast("leaveTeam");
       queryClient.invalidateQueries(["fetchMyTeams"]);
     },
   });
