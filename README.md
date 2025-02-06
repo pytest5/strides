@@ -55,22 +55,22 @@ This platform was originally built as an **MVP for a non-profit organization** t
 
 ### Frontend
 
-- **React**: UI Framework
-- **Tailwind CSS**: For styling and UI design
-- **React Hook Form**: For form handling and validation
-- **Zod**: Schema validation
-- **React Query**: For data fetching and caching
-- **Mapbox GL**: For geospatial map visualization
-- **Radix UI**: Accessible UI components
+- **React** - _UI Framework_
+- **Tailwind CSS** - _For styling and UI design_
+- **React Hook Form** - _For form handling and validation_
+- **Zod** - _Schema validation_
+- **React Query** - _For data fetching and caching_
+- **Mapbox GL** - _For geospatial map visualization_
+- **Radix UI** - _Accessible UI components_
 
 ### Backend
 
-- **Node.js**: JavaScript runtime
-- **Express.js**: Backend framework
-- **PostgreSQL**: Relational database for storing user and strides data
-- **JWT**: Authentication using JSON Web Tokens
-- **bcrypt**: For password hashing
-- **pg**: PostgreSQL client for Node.js
+- **Node.js** - _JavaScript runtime_
+- **Express.js** - _Backend framework_
+- **PostgreSQL** - _Relational database for storing user and strides data_
+- **JWT** - _Authentication using JSON Web Tokens_
+- **bcrypt** - _For password hashing_
+- **pg** - _PostgreSQL client for Node.js_
 
 ## Installation and Setup
 
