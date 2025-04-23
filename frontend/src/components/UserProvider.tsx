@@ -20,13 +20,13 @@ type Jwt = string;
 
 interface UserContextType {
   user: User | undefined;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   logout: () => void;
-  initUser: () => void;
+  initUser: (arg: User) => void;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  jwtToken: string;
-  setJwtToken: () => void;
+  jwtToken: string | undefined;
+  setJwtToken: React.Dispatch<React.SetStateAction<Jwt | undefined>>;
   setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -46,13 +46,14 @@ export const UserContext = React.createContext<UserContextType>({
   isLoggedIn: false,
   isAdmin: false,
   jwtToken: "",
+  setJwtToken: () => {},
   setIsLoggedIn: () => {},
   setIsAdmin: () => {},
 });
 
 export const UserProvider = () => {
   // const queryClient = useQueryClient();
-  const [user, setUser] = React.useState<User | undefined>(undefined);
+  const [user, setUser] = React.useState<User>();
   const [jwtToken, setJwtToken] = React.useState<Jwt | undefined>(undefined);
   // const [decodedToken, setDecodedToken] = React.useState<
   //   DecodedToken | undefined
